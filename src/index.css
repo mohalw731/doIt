@@ -9,6 +9,8 @@ body, html {
   box-sizing: border-box;
   background-color: #F1F5F9;
   min-height: 100dvh;
+  letter-spacing: 0.02em;
+
 }
 
 #hero-text {
