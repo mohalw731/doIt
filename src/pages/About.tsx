@@ -7,7 +7,7 @@ export default function About() {
     <main>
       <Navbar />
 
-      <section className="md:py-32 py-28">
+      <section className="md:py-32 py-20">
         <div className="flex flex-col gap-6 ">
           <h1 className="md:text-8xl font-bold text-5xl">
             <span id="hero-text">We’re building </span>
