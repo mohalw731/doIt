@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html {
+  font-family: "Outfit", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #F1F5F9;
+  height: 100dvh;
+}
+
+#hero-text {
+  display: inline;
+  background: linear-gradient(to right, rgb(211, 215, 219) 50%, rgba(179, 207, 255, 0.7) 100%) text rgb(120, 128, 136);
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin-bottom: -4px;
+}
