@@ -6,7 +6,7 @@ interface TodoContextType {
   addTodo: () => void;
   setTodoText: React.Dispatch<React.SetStateAction<string>>;
   todoText: string;
-  setTodos: React.Dispatch<React.SetStateAction<any[]>>
+  setTodos: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -20,21 +20,23 @@ export function useTodoContext() {
 }
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-    const [todos, setTodos] = useState<Todo[]>([])
-    const [todoText, setTodoText] = useState<string>("")
-  
-    const addTodo = () => {
-      const newTodo = {
-        id: Date.now(),
-        text: todoText,
-        completed: false,
-      };
-      setTodos([...todos, newTodo])
-      setTodoText("")
-    }
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todoText, setTodoText] = useState<string>("");
+
+  const addTodo = () => {
+    const newTodo = {
+      id: Date.now(),
+      text: todoText,
+      completed: false,
+    };
+    setTodos([...todos, newTodo]);
+    setTodoText("");
+  };
 
   return (
-    <TodoContext.Provider value={{ todos, addTodo, setTodoText, todoText, setTodos }}>
+    <TodoContext.Provider
+      value={{ todos, addTodo, setTodoText, todoText, setTodos }}
+    >
       {children}
     </TodoContext.Provider>
   );

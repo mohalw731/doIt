@@ -9,7 +9,7 @@ function App() {
   const { isSignedIn } = useUser()
 
   return (
-    <main className="">
+    <main >
       <BrowserRouter>
       <Routes>
         <Route path='/' element={isSignedIn ? <DashBoard/> : <Landing/>} />

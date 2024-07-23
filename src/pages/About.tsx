@@ -1,3 +1,4 @@
+import CtaMail from "../components/layout/CtaMail";
 import Navbar from "../components/layout/Navbar";
 
 export default function About() {
@@ -22,6 +23,8 @@ export default function About() {
           </p>
         </div>
       </section>
+
+     <CtaMail/>
     </main>
   );
 }
