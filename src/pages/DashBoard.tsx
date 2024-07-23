@@ -1,8 +1,11 @@
+import Form from "../components/dashboard/Form";
+import Navbar from "../components/layout/Navbar";
 
 export default function DashBoard() {
   return (
-    <div>
-      DashBoard
-    </div>
+    <main>
+      <Navbar/>
+      <Form/>
+    </main>
   )
 }

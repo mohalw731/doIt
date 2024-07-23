@@ -6,7 +6,7 @@ export default function Navbar() {
 
   return (
     <header className="flex items-center justify-between py-6">
-      {!isSignedIn && <Link to="/about" className="text-slate-600"> About</Link>}
+      {!isSignedIn && <Link to="/about" className="text-slate-600"> <button className="btn btn-ghost rounded-full font-normal text-base">About</button></Link>}
 
       <Link to='/'>
         <span  className="text-3xl font-bold text-slate-400 hover:text-slate-700">doIt.</span>
@@ -16,7 +16,7 @@ export default function Navbar() {
       {isSignedIn ? (
         <UserButton />
       ) : (
-        <button className="bg-slate-300 py-2 px-6 rounded-full btn btn-sm font-medium  border-none hover:bg-slate-400 hover:text-white">
+        <button className="bg-slate-200 py-2 px-6 rounded-full  font-normal hover:shadow-sm  border-none ">
           <SignInButton />
         </button>
       )}
