@@ -11,6 +11,12 @@ export default function TodoList() {
           <TodoItem key={todo.id} todo={todo}  />
         ))
       }
+
+      {
+        todos.length === 0 && (
+          <span className='text-center text-slate-400 text-2xl w-full flex items-center justify-center mt-20'> No tasks</span>
+        )
+      }
     </ul>
   )
 }

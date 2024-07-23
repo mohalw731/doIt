@@ -8,7 +8,6 @@ export default function DashBoard() {
     <main>
       <Navbar/>  
       <Form />
- 
     </main>
   )
 }

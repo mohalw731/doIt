@@ -6,7 +6,7 @@ export default function Navbar() {
 
   return (
     <header className="flex items-center justify-between py-6">
-      {!isSignedIn && <Link to="/about" className="text-slate-600"> <button className="btn btn-ghost rounded-full font-normal text-base">About</button></Link>}
+      {!isSignedIn && <Link to="/about" className="text-slate-600"> <button className="btn btn-ghost rounded-full font-normal text-base">About</button></Link> }
 
       <Link to='/'>
         <span  className="text-3xl font-bold text-slate-400 hover:text-slate-700">doIt.</span>

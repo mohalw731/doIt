@@ -4,6 +4,7 @@ import { useUser } from "@clerk/clerk-react";
 import DashBoard from "./pages/DashBoard";
 import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
+import BrainStorm from "./pages/BrainStorm";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={isSignedIn ? <DashBoard /> : <Landing />} />
           <Route path="/about" element={<About />} />
+          <Route path="/brain-storm" element={<BrainStorm />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer/>

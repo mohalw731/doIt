@@ -26,7 +26,7 @@ function Form() {
             placeholder="Write a new task"
             onChange={(e) => setTodoText(e.target.value)}
           />
-          <PlusIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer" />
+          <PlusIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer" onClick={() => addTodo()}/>
         </div>
 
         <TodoList />
