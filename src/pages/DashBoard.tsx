@@ -3,9 +3,10 @@ import Navbar from "../components/layout/Navbar";
 
 export default function DashBoard() {
   return (
-    <main>
-      <Navbar/>
+    <main className="">
+      <Navbar/>  
       <Form/>
+ 
     </main>
   )
 }
