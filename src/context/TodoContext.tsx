@@ -13,6 +13,7 @@ interface TodoContextType {
   todoText: string;
   toggleCompleted: (id: string) => void;
   handleDeleteTodos: (id: string) => void;
+  loading: boolean;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -27,6 +28,7 @@ export function useTodoContext() {
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoText, setTodoText] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useAuth();
 
   // Set up a real-time listener for todos when userId changes
@@ -42,6 +44,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
         userId: doc.data().userId,
       }));
       setTodos(fetchedTodos);
+      setLoading(false);
     }, (error) => {
       console.error("Error fetching todos: ", error);
     });
@@ -100,7 +103,8 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     setTodoText,
     todoText,
     toggleCompleted,
-    handleDeleteTodos
+    handleDeleteTodos,
+    loading
   }), [todos, todoText]);
 
   return (
