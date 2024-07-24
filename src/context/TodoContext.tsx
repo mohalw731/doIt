@@ -35,7 +35,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     if (userId) {
       handleGetTodos();
     }
-  }, [userId,todos]);
+  }, [userId]);
 
   const handleGetTodos = async () => {
     if (!userId) return;
@@ -101,12 +101,14 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const handleDeleteTodos = async (id : string) => {
+  const handleDeleteTodos = async (id: string) => {
     try {
       const todoRef = doc(db, "todos", id);
       await deleteDoc(todoRef);
+      // Optionally remove the todo from local state to prevent re-fetching
+      setTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
     } catch (error: any) {
-      toast.error( error.message);
+      toast.error(error.message);
     }
   }
 
