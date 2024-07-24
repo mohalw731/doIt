@@ -3,7 +3,7 @@ import { Todo } from "../types/todo";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { useAuth } from "@clerk/clerk-react";
-import { addDoc, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../configs/Firebase";
 
 interface TodoContextType {
@@ -13,6 +13,7 @@ interface TodoContextType {
   todoText: string;
   setTodos: React.Dispatch<React.SetStateAction<any[]>>;
   toggleCompleted: (id: string) => void;
+  handleDeleteTodos: (id: string) => void;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -100,6 +101,15 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const handleDeleteTodos = async (id : string) => {
+    try {
+      const todoRef = doc(db, "todos", id);
+      await deleteDoc(todoRef);
+    } catch (error: any) {
+      toast.error( error.message);
+    }
+  }
+
   // Memoized context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     todos,
@@ -108,6 +118,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     todoText,
     setTodos,
     toggleCompleted,
+    handleDeleteTodos
   }), [todos, todoText]);
 
   return (
