@@ -54,7 +54,7 @@ export default function Navbar() {
         )}
 
         <Link to="/">
-          <span className="text-3xl font-bold text-slate-500 hover:text-slate-700">
+          <span className="text-3xl font-bold text-slate-500 hover:text-slate-800">
             doIt.
           </span>
         </Link>

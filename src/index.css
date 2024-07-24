@@ -26,8 +26,8 @@ html {
 }
 
 .blue-shadow {
-  -webkit-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .10);
-  -moz-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .10);
+  -webkit-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .22);
+  -moz-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .22);
   box-shadow: 0 -1px 300px 110px #008ffd40;
   position: absolute;
   top: 0;
