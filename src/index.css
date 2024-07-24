@@ -2,7 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body, html {
+body,
+html {
   font-family: "Outfit", sans-serif;
   margin: 0;
   padding: 0;
@@ -18,4 +19,16 @@ body, html {
   -webkit-text-fill-color: transparent;
   line-height: 1.1;
   margin-bottom: -4px;
+}
+
+.blue-shadow {
+  -webkit-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .10);
+  -moz-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .10);
+  box-shadow: 0 -1px 300px 110px #008ffd25;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* max-width: 500px; */
+  /* margin: 0 auto; */
 }

@@ -3,12 +3,11 @@ import TodoList from "./TodoList";
 import Welcome from "./Welcome";
 import { useTodoContext } from "../../context/TodoContext";
 
-
 function Form() {
   const { addTodo, setTodoText, todoText } = useTodoContext();
 
   return (
-    <main className=" py-10 max-w-[600px] mx-auto">
+    <main className=" py-10 max-w-[600px] mx-auto z-50">
       <Welcome />
 
       <form
@@ -26,10 +25,12 @@ function Form() {
             placeholder="Write a new task"
             onChange={(e) => setTodoText(e.target.value)}
           />
-          <PlusIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer" onClick={() => addTodo()}/>
+          <PlusIcon
+            className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer"
+            onClick={() => addTodo()}
+          />
         </div>
-
-        <TodoList />
+          <TodoList />
       </form>
     </main>
   );

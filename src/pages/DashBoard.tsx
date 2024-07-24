@@ -5,7 +5,7 @@ import Navbar from "../components/layout/Navbar";
 export default function DashBoard() {
 
   return (
-    <main>
+    <main className="z-50">
       <Navbar/>  
       <Form />
     </main>

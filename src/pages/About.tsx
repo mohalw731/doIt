@@ -4,7 +4,7 @@ import Navbar from "../components/layout/Navbar";
 
 export default function About() {
   return (
-    <main>
+    <main className="z-50">
       <Navbar />
 
       <section className="md:py-32 py-20">

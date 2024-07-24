@@ -1,5 +1,6 @@
 export type Todo = {
-    id: number;
+    id: string;
     text: string;
     completed: boolean;
+    completionTimestamp?: number | null;
   }

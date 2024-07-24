@@ -15,7 +15,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={isSignedIn ? <DashBoard /> : <Landing />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/about" element={!isSignedIn ? <About /> : <DashBoard />} />
           <Route path="/brain-storm" element={<BrainStorm />} />
         </Routes>
       </BrowserRouter>
