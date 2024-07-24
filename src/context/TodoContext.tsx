@@ -3,7 +3,7 @@ import { Todo } from "../types/todo";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { useAuth } from "@clerk/clerk-react";
-import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../configs/Firebase";
 
 interface TodoContextType {
@@ -11,7 +11,6 @@ interface TodoContextType {
   addTodo: () => void;
   setTodoText: React.Dispatch<React.SetStateAction<string>>;
   todoText: string;
-  setTodos: React.Dispatch<React.SetStateAction<any[]>>;
   toggleCompleted: (id: string) => void;
   handleDeleteTodos: (id: string) => void;
 }
@@ -30,30 +29,26 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todoText, setTodoText] = useState<string>("");
   const { userId } = useAuth();
 
-  // Fetch todos only when userId changes
+  // Set up a real-time listener for todos when userId changes
   useEffect(() => {
-    if (userId) {
-      handleGetTodos();
-    }
-  }, [userId]);
-
-  const handleGetTodos = async () => {
     if (!userId) return;
 
-    try {
-      const todosQuery = query(collection(db, "todos"), where("userId", "==", userId));
-      const querySnapshot = await getDocs(todosQuery);
-      const fetchedTodos: Todo[] = querySnapshot.docs.map((doc) => ({
+    const todosQuery = query(collection(db, "todos"), where("userId", "==", userId));
+    const unsubscribe = onSnapshot(todosQuery, (snapshot) => {
+      const fetchedTodos: Todo[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         text: doc.data().text,
         completed: doc.data().completed,
         userId: doc.data().userId,
       }));
       setTodos(fetchedTodos);
-    } catch (error) {
+    }, (error) => {
       console.error("Error fetching todos: ", error);
-    }
-  };
+    });
+
+    // Clean up the listener on unmount
+    return () => unsubscribe();
+  }, [userId]);
 
   const addTodo = async () => {
     if (!todoText) {
@@ -63,18 +58,12 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const newTodo = {
-        id: Date.now().toString(),
         text: todoText,
         completed: false,
         userId: userId || "",
       };
 
-      const docRef = await addDoc(collection(db, "todos"), {
-        ...newTodo,
-        userId: userId || "",
-        id: Date.now(),
-      });
-      setTodos((prevTodos) => [...prevTodos, { ...newTodo, id: docRef.id }]);
+      await addDoc(collection(db, "todos"), newTodo);
       setTodoText("");
     } catch (error: any) {
       toast.error(error.message);
@@ -90,12 +79,6 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       await updateDoc(todoRef, {
         completed: !todoToUpdate.completed,
       });
-
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        )
-      );
     } catch (error) {
       console.error("Error toggling completed: ", error);
     }
@@ -105,8 +88,6 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const todoRef = doc(db, "todos", id);
       await deleteDoc(todoRef);
-      // Optionally remove the todo from local state to prevent re-fetching
-      setTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
     } catch (error: any) {
       toast.error(error.message);
     }
@@ -118,7 +99,6 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     addTodo,
     setTodoText,
     todoText,
-    setTodos,
     toggleCompleted,
     handleDeleteTodos
   }), [todos, todoText]);
