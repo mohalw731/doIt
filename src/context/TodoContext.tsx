@@ -34,7 +34,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     if (userId) {
       handleGetTodos();
     }
-  }, [userId]);
+  }, [userId,todos]);
 
   const handleGetTodos = async () => {
     if (!userId) return;
