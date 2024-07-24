@@ -28,7 +28,7 @@ html {
 .blue-shadow {
   -webkit-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .22);
   -moz-box-shadow: 0px -1px 150px 50px rgba(0, 143, 253, .22);
-  box-shadow: 0 -1px 300px 110px #008ffd40;
+  box-shadow: 0 -1px 300px 110px #008ffd41;
   position: absolute;
   top: 0;
   left: 0;

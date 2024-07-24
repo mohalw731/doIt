@@ -5,7 +5,6 @@ import DashBoard from "./pages/DashBoard";
 import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
 import BrainStorm from "./pages/BrainStorm";
-import Subscription from "./Subscription";
 
 
 function App() {
