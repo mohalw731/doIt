@@ -1,3 +1,4 @@
+// src/context/TodoContext.tsx
 import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { Todo } from "../types/todo";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,6 +18,7 @@ interface TodoContextType {
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
+
 export function useTodoContext() {
   const context = useContext(TodoContext);
   if (context === undefined) {
@@ -25,7 +27,7 @@ export function useTodoContext() {
   return context;
 }
 
-export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
+export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoText, setTodoText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -94,7 +96,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (error: any) {
       toast.error(error.message);
     }
-  }
+  };
 
   // Memoized context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({

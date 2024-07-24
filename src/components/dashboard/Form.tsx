@@ -2,12 +2,14 @@ import { PlusIcon } from "@radix-ui/react-icons";
 import TodoList from "./TodoList";
 import Welcome from "./Welcome";
 import { useTodoContext } from "../../context/TodoContext";
+import Quote from "./Quote";
 
 function Form() {
   const { addTodo, setTodoText, todoText } = useTodoContext();
 
   return (
-    <main className=" py-10 max-w-[600px] mx-auto z-50">
+    <main className=" py-5 max-w-[600px] mx-auto z-50">
+      <Quote />
       <Welcome />
 
       <form
@@ -30,7 +32,7 @@ function Form() {
             onClick={() => addTodo()}
           />
         </div>
-          <TodoList />
+        <TodoList />
       </form>
     </main>
   );
