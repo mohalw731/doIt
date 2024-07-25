@@ -6,7 +6,7 @@ import lol from "../../assets/doitai.png";
 export default function BrainstormLayout() {
   const { user } = useUser();
   return (
-    <main className="z-50 w-full h-[calc(100vh-150px)] my-5">
+    <main className="z-50 w-full h-[calc(100dvh-150px)] my-5">
       <section className="max-w-4xl h-full mx-auto relative py-5 flex flex-col">
         {/* <div className="py-10 ">
           <Welcome />
