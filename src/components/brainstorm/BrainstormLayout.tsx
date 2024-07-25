@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import Welcome from "../layout/Welcome";
+// import Welcome from "../layout/Welcome";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import lol from "../../assets/doitai.png";
 
