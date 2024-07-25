@@ -11,7 +11,7 @@ export default function BrainstormLayout() {
           <Welcome />
         </div>
 
-        {/* <ChatBox/> */}
+        <ChatBox/>
 
         <form className="mt-auto absolute bottom-0 w-full py-5">
           <input

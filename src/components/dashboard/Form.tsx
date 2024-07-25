@@ -8,7 +8,7 @@ function Form() {
   const { addTodo } = useTodoContext();
 
   return (
-    <main className=" py-5 md:py-7 max-w-[600px] mx-auto z-50">
+    <main className=" py-5 md:pt-7 max-w-[600px] mx-auto z-50 pb-14">
       <Quote />
       <Welcome />
       <form
@@ -27,21 +27,25 @@ function Form() {
 
 const Input = () => {
   const { todoText, setTodoText, addTodo } = useTodoContext();
+  // const completedCount = todos.filter((todo) => todo.completed).length;
 
   return (
-    <div className="relative">
-      <input
-        type="text"
-        value={todoText}
-        className="input py-7 rounded-xl  w-full bg-slate-200 text-black"
-        placeholder="Write a new task"
-        onChange={(e) => setTodoText(e.target.value)}
-      />
-      <PlusIcon
-        className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer"
-        onClick={() => addTodo()}
-      />
-    </div>
+    <>
+      <div className="relative">
+        <input
+          type="text"
+          value={todoText}
+          className="input py-7 rounded-xl  w-full bg-slate-200 text-black"
+          placeholder="Write a new task"
+          onChange={(e) => setTodoText(e.target.value)}
+        />
+        <PlusIcon
+          className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer"
+          onClick={() => addTodo()}
+        />
+      </div>
+      {/* <h2 className="text-slate-400 mt-1 text-sm">{`${completedCount}/${todos.length}`}</h2> */}
+    </>
   );
 };
 
