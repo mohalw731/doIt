@@ -16,7 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={isSignedIn ? <DashBoard /> : <Landing />} />
           <Route path="/about" element={!isSignedIn ? <About /> : <DashBoard />} />
-          <Route path="/brain-storm" element={<BrainStorm />} />
+          <Route path="/brainstorm" element={<BrainStorm />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer/>

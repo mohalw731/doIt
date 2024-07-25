@@ -53,11 +53,26 @@ export default function Navbar() {
           </button>
         )}
 
-        <Link to="/">
+
+      <Link to="/">
           <span className="text-3xl font-bold text-slate-500 hover:text-slate-800">
             doIt.
           </span>
         </Link>
+
+      <nav className=" gap-5 hidden md:flex">
+        <Link to="/" className="text-slate-600">
+            <button className="btn btn-ghost rounded-full font-normal text-base">
+              Home
+            </button>
+          </Link>
+
+          <Link to="/brainstorm" className="text-slate-600">
+            <button className="btn btn-ghost rounded-full font-normal text-base">
+              Brainstorm AI
+            </button>
+          </Link>
+      </nav>
 
         {isSignedIn ? (
           <UserButton />
