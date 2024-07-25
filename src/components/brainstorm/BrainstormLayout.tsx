@@ -6,13 +6,13 @@ import lol from "../../assets/doitai.png";
 export default function BrainstormLayout() {
   const { user } = useUser();
   return (
-    <main className="z-50 w-full h-[calc(100dvh-155px)] my-5">
+    <main className="z-50 w-full h-[calc(100dvh-120px)] my-5">
       <section className="max-w-4xl h-full mx-auto relative py-5 flex flex-col">
         {/* <div className="py-10 ">
           <Welcome />
         </div> */}
 
-        <section className="flex-grow flex flex-col gap-14 overflow-y-auto pb-10">
+        <section className="flex-grow flex flex-col gap-14 overflow-y-auto pb-20">
           {/* user text */}
           <div className="flex flex-col md:flex-row md:gap-5 gap-3">
             <img src={user?.imageUrl} alt="" className="size-8 rounded-full" />
