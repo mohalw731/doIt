@@ -7,9 +7,8 @@ export default function Hero() {
           <br />
           to-do list
         </h1>
-        <p className="text-slate-600 md:text-2xl max-w-[500px] text-s">
-          doIt is a back to basic to-do list focused on fast and delightful user
-          experience.
+        <p className="text-slate-600 md:text-2xl max-w-[550px] text-s">
+        doIt is a back to basic to-do list focused on fast and delightful user experience.
         </p>
 
         <div className="">

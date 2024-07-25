@@ -4,12 +4,10 @@ export default function PriceCard() {
   const planName = 'Standard';
   const price = 15;
   const features = [
-    { name: 'Unlimited Features', available: true },
-    { name: 'Enhanced Security', available: true },
+    { name: 'doIt todo list', available: true },
+    { name: 'Barinstorm Ai', available: true },
+    { name: 'Early access to new features', available: true },
     { name: 'Priority Support', available: true },
-    { name: 'Exclusive Access', available: true },
-    { name: 'Ad-free Experience', available: false },
-    { name: 'Customization Options', available: true },
   ];
 
   return (
@@ -18,10 +16,10 @@ export default function PriceCard() {
         <div className="text-center mb-6">
           <h5 className="text-2xl font-semibold text-gray-800 mb-3">{planName}</h5>
           <span className="block text-5xl font-bold text-gray-800 mb-3">${price}</span>
-          <span className="block text-gray-600 font-medium mb-6">per user, per month</span>
+          <span className="block text-gray-600 font-medium mb-6">/per month</span>
           <a
             href="#"
-            className="relative group inline-block w-full py-4 px-6 text-center text-white hover:text-gray-300 bg-slate-700 font-semibold rounded-full overflow-hidden transition duration-200"
+            className="relative group inline-block w-full py-4 px-6 text-center text-white hover:text-gray-300 bg-slate-800 font-semibold rounded-full overflow-hidden transition duration-200"
           >
             <div className="absolute top-0 right-full w-full h-full bg-[#1F2937] transform group-hover:translate-x-full group-hover:scale-102 transition duration-500"></div>
             <span className="relative">Get Started</span>
