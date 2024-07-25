@@ -1,16 +1,15 @@
+import { useNavigate } from "react-router-dom";
 
 export default function Menu() {
+  const navigate = useNavigate()
   return (
     <>
-        <ul className="menu absolute bg-slate-100 border shadow-xl top-[5rem] border-slate-200 rounded-box  left-0 right-0 w-[100%] max-w-7xl mx-auto  py-5 z-50 md:hidden">
-        <li>
-          <a>Item 1</a>
+        <ul className="menu absolute bg-slate-200 border shadow-xl top-[5rem] border-slate-200 rounded-box  left-0 right-0 w-[100%] max-w-7xl mx-auto  py-7 z-[999] md:hidden">
+        <li onClick={() => navigate("/")}>
+          <a>Home</a>
         </li>
-        <li>
-          <a>Item 2</a>
-        </li>
-        <li>
-          <a>Item 3</a>
+        <li onClick={() => navigate("/brainstorm")}>
+          <a>Brainstorm</a>
         </li>
       </ul>
     </>

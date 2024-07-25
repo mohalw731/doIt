@@ -1,11 +1,11 @@
 import { PlusIcon } from "@radix-ui/react-icons";
 import TodoList from "./TodoList";
-import Welcome from "./Welcome";
+import Welcome from "../layout/Welcome";
 import { useTodoContext } from "../../context/TodoContext";
 import Quote from "./Quote";
 
 function Form() {
-  const { addTodo} = useTodoContext();
+  const { addTodo } = useTodoContext();
 
   return (
     <main className=" py-5 md:py-7 max-w-[600px] mx-auto z-50">
