@@ -1,50 +1,9 @@
 import {  EyeClosedIcon, LightningBoltIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import useGetDailyQuotes from "../../Hooks/useGetDailyQuotes";
 
 export default function Quote() {
-  const [quote, setQuote] = useState("");
-  const [isOpen, setIsOpen] = useState(true);
 
-  async function fetchQuotes() {
-    const response = await fetch("https://type.fit/api/quotes");
-    const quotes = await response.json();
-    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)].text;
-    setQuote(randomQuote);
-  }
-
-  function getStoredDate() {
-    return localStorage.getItem('lastQuoteDate');
-  }
-
-  function setStoredDate(date: string) {
-    localStorage.setItem('lastQuoteDate', date);
-  }
-
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
-    const storedDate = getStoredDate();
-
-    if (storedDate !== today) {
-      // If the stored date is not today, fetch a new quote and update the date
-      fetchQuotes();
-      setStoredDate(today);
-    } else {
-      // Otherwise, just fetch the quote from localStorage if necessary
-      const savedQuote = localStorage.getItem('currentQuote');
-      if (savedQuote) {
-        setQuote(savedQuote);
-      } else {
-        fetchQuotes();
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    if (quote) {
-      // Save the current quote in localStorage
-      localStorage.setItem('currentQuote', quote);
-    }
-  }, [quote]);
+  const { quote, isOpen, setIsOpen } = useGetDailyQuotes();
 
   return (
     <div className={`flex flex-col items-center  ${!isOpen ? 'mb-5' : 'mb-5 md:mb-10'}`}>

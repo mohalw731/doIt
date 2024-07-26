@@ -16,8 +16,7 @@ function Form() {
           e.preventDefault();
           addTodo();
         }}
-        className="max-w-[600px]"
-      >
+        className="max-w-[600px]">
         <Input />
         <TodoList />
       </form>
