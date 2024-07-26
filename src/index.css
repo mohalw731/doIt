@@ -7,6 +7,7 @@
   padding: 0;
   box-sizing: border-box;  
   transition: all 0.7s ease;
+  scroll-behavior: smooth;
 }
 
 
@@ -16,7 +17,7 @@ html {
   font-family: "Outfit", sans-serif;
   background-color: #F1F5F9;
   min-height: 100dvh;
-  /* letter-spacing: 0.02em; */
+  scroll-behavior: smooth;
 }
 
 #hero-text {

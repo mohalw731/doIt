@@ -2,7 +2,7 @@ import PriceCard from '../ui/PriceCard'
 
 export default function PricingCards() {
   return (
-    <div className="flex gap-5 md:flex-row flex-col py-20 ">
+    <div className="flex gap-5 md:flex-row flex-col py-20 " id='pricing'>
             <div className="flex flex-col gap-6 ">
           <h1 className="md:text-7xl font-bold  text-4xl">
             <span id="hero-text">We’re building </span>

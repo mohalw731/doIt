@@ -12,9 +12,9 @@ export default function Hero() {
         </p>
 
         <div className="">
-          <button className="bg-[#008ffd] md:py-3 text-white md:px-6 rounded-full px-4 py-2  hover:opacity-80 md:text-lg text-sm">
+          <a className="bg-[#008ffd] md:py-3 cursor-pointer text-white md:px-6 rounded-full px-4 py-2  hover:opacity-65 md:text-lg text-sm" href="#pricing">
             Get Started
-          </button>
+          </a>
         </div>
       </section>
     </main>
