@@ -34,7 +34,7 @@ const Input = () => {
         <input
           type="text"
           value={todoText}
-          className="input py-7 rounded-xl  w-full bg-slate-200 text-black"
+          className="input py-7 rounded-xl  w-full bg-slate-200 text-slate-600"
           placeholder="Write a new task"
           onChange={(e) => setTodoText(e.target.value)}
           required

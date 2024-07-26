@@ -17,7 +17,7 @@ const Hero = () => {
   return (
     <section className="md:py-32 py-20">
       <div className="flex flex-col gap-6 ">
-        <h1 className="md:text-8xl font-bold text-5xl">
+        <h1 className="md:text-8xl font-bold text-5xl text-slate-800">
           <span id="hero-text">We’re building</span>
           <br />
           to-do list you’ll <br /> enjoy using

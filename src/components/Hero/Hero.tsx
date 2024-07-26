@@ -2,7 +2,7 @@ export default function Hero() {
   return (
     <main className="md:py-32 py-20">
       <section className="flex flex-col md:gap-6 gap-4">
-        <h1 className="md:text-8xl font-bold text-5xl">
+        <h1 className="md:text-8xl font-bold text-5xl text-slate-800">
           <span id="hero-text">A more humane</span> 
           <br />
           to-do list

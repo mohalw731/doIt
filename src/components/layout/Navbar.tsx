@@ -18,7 +18,7 @@ export default function Navbar() {
         <div className="blue-shadow max-w-7xl mx-auto" />
         {!isSignedIn ? (
           <Link to="/about" className="text-slate-600">
-            <button className="btn btn-ghost rounded-full font-normal text-base">
+            <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
               About
             </button>
           </Link>
@@ -54,7 +54,7 @@ export default function Navbar() {
         )}
 
         <Link to="/">
-          <span className="text-3xl font-bold text-slate-500 hover:text-slate-800">
+          <span className="text-3xl font-bold text-slate-400 hover:text-slate-800">
             doIt.
           </span>
         </Link>
@@ -62,13 +62,13 @@ export default function Navbar() {
         {isSignedIn && (
           <nav className=" gap-5 hidden md:flex">
             <Link to="/" className="text-slate-600">
-              <button className="btn btn-ghost rounded-full font-normal text-base">
+              <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
                 Home
               </button>
             </Link>
 
             <Link to="/brainstorm" className="text-slate-600">
-              <button className="btn btn-ghost rounded-full font-normal text-base">
+              <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
                 Brainstorm AI
               </button>
             </Link>
@@ -78,7 +78,7 @@ export default function Navbar() {
         {isSignedIn ? (
           <UserButton />
         ) : (
-          <button className="bg-slate-200 py-2 px-6 rounded-full  font-normal hover:shadow-sm  border-none ">
+          <button className="bg-slate-200 py-2 px-6 rounded-full  font-normal hover:shadow-sm  border-none text-slate-600 ">
             <SignInButton />
           </button>
         )}

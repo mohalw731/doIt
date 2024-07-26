@@ -1,7 +1,7 @@
 // import { useUser } from "@clerk/clerk-react";
+// import lol from "../../assets/doitai.png";
 import Welcome from "../layout/Welcome";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
-// import lol from "../../assets/doitai.png";
 
 export default function BrainstormLayout() {
   return (
@@ -11,6 +11,7 @@ export default function BrainstormLayout() {
           <Welcome />
         </div>
         {/* <ChatBox/> */}
+
         <form className="mt-auto absolute bottom-0 w-full py-5">
           <input
             type="text"

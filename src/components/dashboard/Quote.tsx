@@ -8,7 +8,7 @@ export default function Quote() {
   return (
     <div className={`flex flex-col items-center  ${!isOpen ? 'mb-5' : 'mb-5 md:mb-10'}`}>
     <div className={`md:text-2xl flex flex-col text-center items-center justify-start text-lg z-50 mb-1 ${!isOpen ? 'hidden' : 'visible'}`}>
-      <h2 className="md:text-lg text-base text-slate-500">Quote of the day :</h2>
+      <h2 className="md:text-lg text-base text-slate-600">Quote of the day :</h2>
       <span className="text-slate-400">“{quote}”</span>
     </div>
     

@@ -14,7 +14,7 @@ export default function CtaMail() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button className="py-3 px-8 font-normal rounded-full text-white bg-[#1F2937] md:text-lg text-sm">
+        <button className="py-3 px-8 font-normal rounded-full text-white bg-slate-800 md:text-lg text-sm">
           Join the waitlist
         </button>
       </form>
