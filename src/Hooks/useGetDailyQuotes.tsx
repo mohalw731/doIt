@@ -20,7 +20,7 @@ export default function useGetDailyQuotes() {
     }
   
     useEffect(() => {
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0]; 
       const storedDate = getStoredDate();
   
       if (storedDate !== today) {
