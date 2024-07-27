@@ -1,4 +1,4 @@
-import Welcome from "../layout/Welcome";
+// import Welcome from "../layout/Welcome";
 import ChatBox from "./Chatbox";
 import Form from "./Form";
 
