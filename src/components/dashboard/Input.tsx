@@ -19,7 +19,7 @@ export const Input = () => {
           />
           {todoText.length > 0 && (
             <PlusIcon
-              className="absolute right-3 top-1/2 -translate-y-1/2 size-7 text-slate-400 cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 size-7 bg-slate-200 text-slate-400 cursor-pointer"
               onClick={addTodo}
             />
           )}
