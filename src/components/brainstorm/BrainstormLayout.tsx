@@ -1,6 +1,5 @@
 import Welcome from "../layout/Welcome";
 import ChatBox from "./Chatbox";
-
 import Form from "./Form";
 
 export default function BrainstormLayout() {
