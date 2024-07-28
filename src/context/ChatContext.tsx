@@ -16,7 +16,6 @@ interface ChatContextType {
 // Create the context
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
-// Create a provider component
 export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [messages, setMessages] = useState<Message[]>(() => {
     const savedMessages = localStorage.getItem('chatMessages');
@@ -43,7 +42,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-// Custom hook to use the chat context
 export const useChat = () => {
   const context = useContext(ChatContext);
   if (!context) {

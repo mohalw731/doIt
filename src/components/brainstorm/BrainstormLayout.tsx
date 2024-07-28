@@ -5,21 +5,14 @@ import Welcome from "../layout/Welcome";
 import ReactMarkdown from "react-markdown";
 import { useChat } from "../../context/ChatContext";
 import useGeminiAi from "../../Hooks/useGeminiAi";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
+import useAdjustHeight from "../../Hooks/useAdjustHeight";
 
 const BrainstormLayout = () => {
   const { user } = useUser();
   const { messages, clearMessages } = useChat();
-  const { input, setInput, loading, run } = useGeminiAi();
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-
-  // Function to adjust textarea height
-  const adjustTextareaHeight = () => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-    }
-  };
+  const { input, setInput, loading, run, error } = useGeminiAi();
+  const { textareaRef, adjustTextareaHeight } = useAdjustHeight();
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -35,6 +28,13 @@ const BrainstormLayout = () => {
         )}
 
         <section className="flex-grow flex conversation-container flex-col-reverse gap-3 pb-36 overflow-y-auto">
+          {
+            error && (
+              <div className="flex justify-center items-center">
+                <p className="text-red-500">Something went wrong</p>
+              </div>
+            )
+          }
           <div className="flex-grow flex flex-col gap-3">
             {messages.map((message, index) => (
               <div
@@ -45,27 +45,36 @@ const BrainstormLayout = () => {
               >
                 <div
                   className={`flex md:flex-row flex-col gap-2 items-start ${
-                    message.isUser ? "items-start" : ""
+                    message.isUser ? "md:items-start items-end" : ""
                   }`}
                 >
-                  <img
-                    src={message.isUser ? user?.imageUrl || "" : lol}
-                    alt={message.isUser ? "User avatar" : "AI avatar"}
-                    className="size-8 rounded-full"
-                  />
-                  <span
-                    className={`py-2 px-4 rounded-xl max-w-2xl ${
-                      message.isUser
-                        ? "bg-slate-600 text-white"
-                        : "bg-transparent tracking-wide"
-                    }`}
-                  >
-                    {message.isUser ? (
-                      message.text
-                    ) : (
-                      <ReactMarkdown>{message.text}</ReactMarkdown>
-                    )}
-                  </span>
+                  {message.isUser ? (
+                    <>
+                      <span
+                        className={` px-4 py-2  rounded-xl max-w-2xl bg-slate-600 text-white`}
+                      >
+                        {message.text}
+                      </span>
+                      <img
+                        src={user?.imageUrl || ""}
+                        alt="User avatar"
+                        className="size-8 rounded-full"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={lol}
+                        alt="AI avatar"
+                        className="size-8 rounded-full"
+                      />
+                      <span
+                        className={`py-2 px-4 rounded-xl max-w-2xl bg-transparent tracking-wide`}
+                      >
+                        <ReactMarkdown>{message.text}</ReactMarkdown>
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
@@ -87,13 +96,12 @@ const BrainstormLayout = () => {
           <textarea
             ref={textareaRef}
             rows={1}
-            className="textarea py-4 rounded-xl w-full bg-slate-200 text-black overflow-y-auto resize-none"
+            className="textarea py-4 rounded-full w-full bg-slate-200 text-black overflow-y-auto resize-none"
             placeholder="Let's brainstorm"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            style={{ height: 'auto', maxHeight: '150px' }}  // Adjust maxHeight as needed
+            style={{ height: 'auto', maxHeight: '150px' }}
           />
-          {/* <div className="bg-slate-200 absolute right-10 w-14 h-7 top-[35px] z-[100]" /> */}
           <PaperPlaneIcon
             className="absolute right-5 top-1/2 z-[101] -translate-y-1/2 size-6 text-slate-400 cursor-pointer"
             onClick={run}

@@ -6,6 +6,7 @@ export default function useGeminiAi() {
   const { messages, addMessage } = useChat();
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const genAI = new GoogleGenerativeAI("AIzaSyAxaPupjEmVFR3dRo68ujhtopHQpN7CZC4");
 
@@ -30,7 +31,10 @@ export default function useGeminiAi() {
       addMessage(aiMessage);
       setInput("");
     } catch (error) {
-      console.error("Error generating content:", error);
+      setError(true);
+      setTimeout(() => {
+        setError(false);
+      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -40,6 +44,7 @@ export default function useGeminiAi() {
     input,
     setInput,
     loading,
-    run
+    run,
+    error
   };
 }
