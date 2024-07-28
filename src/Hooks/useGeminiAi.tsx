@@ -7,13 +7,14 @@ export default function useGeminiAi() {
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [context, setContext] = useState<string>("");
 
   const genAI = new GoogleGenerativeAI("AIzaSyAxaPupjEmVFR3dRo68ujhtopHQpN7CZC4");
 
   const run = async (e: any) => {
     e.preventDefault();
     if (!input.trim()) return;
-
+    setInput("");
     const userMessage = { text: input, isUser: true };
     addMessage(userMessage);
 
@@ -22,14 +23,14 @@ export default function useGeminiAi() {
     try {
       // Combine the history of messages into a single input string
       const messageHistory = messages.map(msg => `${msg.isUser ? 'User' : 'AI'}: ${msg.text}`).join('\n');
-      const fullInput = `${messageHistory}\nUser: ${input}`;
+      const fullInput = `${context}\n${messageHistory}\nUser: ${input}`;
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       const result = await model.generateContent(fullInput);
       const text = await result.response.text();
       const aiMessage = { text, isUser: false };
       addMessage(aiMessage);
-      setInput("");
+      
     } catch (error) {
       setError(true);
       setTimeout(() => {
@@ -40,11 +41,18 @@ export default function useGeminiAi() {
     }
   };
 
+  const autoMessage = (message: string) => {
+    const aiMessage = { text: message, isUser: false };
+    addMessage(aiMessage);
+  };
+
   return {
     input,
     setInput,
     loading,
     run,
-    error
+    error,
+    setContext,
+    autoMessage
   };
 }

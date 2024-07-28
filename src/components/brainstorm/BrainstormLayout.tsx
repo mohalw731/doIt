@@ -1,23 +1,49 @@
+// components/brainstorm/BrainstormLayout.tsx
 import { useUser } from "@clerk/clerk-react";
 import lol from "../../assets/doitai.png";
-import { PaperPlaneIcon, SymbolIcon } from "@radix-ui/react-icons";
 import Welcome from "../layout/Welcome";
-import ReactMarkdown from "react-markdown";
 import { useChat } from "../../context/ChatContext";
 import useGeminiAi from "../../Hooks/useGeminiAi";
 import { useEffect } from "react";
 import useAdjustHeight from "../../Hooks/useAdjustHeight";
-import remarkGfm from 'remark-gfm';  // Import GitHub flavored markdown
+import DropdownSelector from "./DropdownSelector";
+import MessageList from "./MessageList";
+import InputForm from "./InputForm";
+
+type AIType = 'default' | 'marketer' | 'assistant' | 'programmer' | 'seo-specialist';
 
 const BrainstormLayout = () => {
   const { user } = useUser();
   const { messages, clearMessages } = useChat();
-  const { input, setInput, loading, run, error } = useGeminiAi();
+  const { input, setInput, loading, run, error, setContext, autoMessage } = useGeminiAi();
   const { textareaRef, adjustTextareaHeight } = useAdjustHeight();
 
   useEffect(() => {
     adjustTextareaHeight();
   }, [input]);
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedType = event.target.value as AIType;
+
+    const aiContexts: Record<AIType, string> = {
+      default: '',
+      marketer: 'You are an expert marketer.',
+      assistant: 'You are a professional assistant.',
+      programmer: 'You are an expert programmer.',
+      'seo-specialist': 'You are an SEO specialist.'
+    };
+
+    const initialPrompts: Record<AIType, string> = {
+      marketer: 'What about marketing do you need help with?',
+      assistant: 'How can I assist you today?',
+      programmer: 'What programming question do you have?',
+      'seo-specialist': 'What SEO concerns do you need help with?',
+      default: '' // Adding default to initialPrompts for consistency
+    };
+
+    setContext(aiContexts[selectedType]);
+    autoMessage(initialPrompts[selectedType]);
+  };
 
   return (
     <main className="z-50 w-full h-[calc(100dvh-120px)] my-5">
@@ -25,93 +51,29 @@ const BrainstormLayout = () => {
         {messages.length === 0 && (
           <div className="md:py-10">
             <Welcome />
+            <DropdownSelector onSelectChange={handleSelectChange} />
           </div>
         )}
-
         <section className="flex-grow flex conversation-container flex-col-reverse gap-3 pb-36 overflow-y-auto">
           {error && (
             <div className="flex justify-center items-center">
               <p className="text-red-500">Something went wrong</p>
             </div>
           )}
-          <div className="flex-grow flex flex-col gap-3">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  message.isUser ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`flex md:flex-row flex-col gap-2 items-start ${
-                    message.isUser ? "md:items-start items-end flex-col-reverse" : ""
-                  }`}
-                >
-                  {message.isUser ? (
-                    <>
-                      <span
-                        className={`px-4 py-2 rounded-xl max-w-2xl bg-slate-600 text-white`}
-                        style={{ overflowWrap: 'break-word', wordWrap: 'break-word', wordBreak: 'break-word' }}
-                      >
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
-                      </span>
-                      <img
-                        src={user?.imageUrl || ""}
-                        alt="User avatar"
-                        className="size-8 rounded-full"
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        src={lol}
-                        alt="AI avatar"
-                        className="size-8 rounded-full"
-                      />
-                      <span
-                        className={`py-2 px-4 rounded-xl max-w-2xl bg-transparent tracking-wide`}
-                        style={{ overflowWrap: 'break-word', wordWrap: 'break-word', wordBreak: 'break-word' }}
-                      >
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
-                      </span>
-                    </>
-                  )}
-                </div>
-              </div>
-            ))}
-
-            {loading && (
-              <div className="flex justify-start gap-3">
-                <span className="py-2 px-4 rounded-xl bg-slate-200">
-                  Loading...
-                </span>
-              </div>
-            )}
-          </div>
+          <MessageList messages={messages} userAvatarUrl={user?.imageUrl || ""} aiAvatarUrl={lol} />
+          {loading && (
+            <div className="flex justify-start gap-3">
+              <span className="py-2 px-4 rounded-xl bg-slate-200">Loading...</span>
+            </div>
+          )}
         </section>
-
-        <form
-          onSubmit={run}
-          className="mt-auto absolute bottom-0 w-full md:py-5 flex items-center"
-        >
-          <textarea
-            ref={textareaRef}
-            rows={1}
-            className="textarea py-4 rounded-xl w-full bg-slate-200 text-black overflow-y-auto resize-none"
-            placeholder="Let's brainstorm"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            style={{ height: 'auto', maxHeight: '150px' }}
-          />
-          <PaperPlaneIcon
-            className="absolute right-5 top-1/2 z-[101] -translate-y-1/2 size-6 text-slate-400 cursor-pointer"
-            onClick={run}
-          />
-          <SymbolIcon
-            className="absolute z-[101] bg-slate-200 right-16 top-1/2 -translate-y-1/2 size-6 text-slate-400 cursor-pointer"
-            onClick={clearMessages}
-          />
-        </form>
+        <InputForm
+          input={input}
+          setInput={setInput}
+          run={run}
+          clearMessages={clearMessages}
+          textareaRef={textareaRef}
+        />
       </section>
     </main>
   );
