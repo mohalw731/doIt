@@ -5,17 +5,31 @@ import Welcome from "../layout/Welcome";
 import ReactMarkdown from "react-markdown";
 import { useChat } from "../../context/ChatContext";
 import useGeminiAi from "../../Hooks/useGeminiAi";
+import { useRef, useEffect } from "react";
 
 const BrainstormLayout = () => {
   const { user } = useUser();
   const { messages, clearMessages } = useChat();
   const { input, setInput, loading, run } = useGeminiAi();
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // Function to adjust textarea height
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [input]);
 
   return (
     <main className="z-50 w-full h-[calc(100dvh-120px)] my-5">
       <section className="max-w-6xl h-full mx-auto relative py-5 flex flex-col">
         {messages.length === 0 && (
-          <div className="py-10">
+          <div className="md:py-10">
             <Welcome />
           </div>
         )}
@@ -31,7 +45,7 @@ const BrainstormLayout = () => {
               >
                 <div
                   className={`flex md:flex-row flex-col gap-2 items-start ${
-                    message.isUser ? "items-end" : "items-start"
+                    message.isUser ? "items-start" : ""
                   }`}
                 >
                   <img
@@ -40,7 +54,7 @@ const BrainstormLayout = () => {
                     className="size-8 rounded-full"
                   />
                   <span
-                    className={`py-2 px-4 rounded-xl text-sm md:text-base max-w-2xl ${
+                    className={`py-2 px-4 rounded-xl max-w-2xl ${
                       message.isUser
                         ? "bg-slate-600 text-white"
                         : "bg-transparent tracking-wide"
@@ -49,7 +63,7 @@ const BrainstormLayout = () => {
                     {message.isUser ? (
                       message.text
                     ) : (
-                      <ReactMarkdown className='text-sm md:text-base'>{message.text}</ReactMarkdown>
+                      <ReactMarkdown>{message.text}</ReactMarkdown>
                     )}
                   </span>
                 </div>
@@ -68,16 +82,18 @@ const BrainstormLayout = () => {
 
         <form
           onSubmit={run}
-          className="mt-auto absolute bottom-0 w-full py-5 flex items-center"
+          className="mt-auto absolute bottom-0 w-full md:py-5 flex items-center"
         >
-          <input
-            type="text"
-            className="input py-7 rounded-xl w-full bg-slate-200 text-black pr-14"
+          <textarea
+            ref={textareaRef}
+            rows={1}
+            className="textarea py-4 rounded-xl w-full bg-slate-200 text-black overflow-y-auto resize-none"
             placeholder="Let's brainstorm"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            style={{ height: 'auto', maxHeight: '150px' }}  // Adjust maxHeight as needed
           />
-          <div className="bg-slate-200 absolute right-10 w-14 h-7 top-[35px] z-[100]" />
+          {/* <div className="bg-slate-200 absolute right-10 w-14 h-7 top-[35px] z-[100]" /> */}
           <PaperPlaneIcon
             className="absolute right-5 top-1/2 z-[101] -translate-y-1/2 size-6 text-slate-400 cursor-pointer"
             onClick={run}
