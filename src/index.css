@@ -102,3 +102,14 @@ html {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+
+/* Ensure code blocks and inline code do not overflow */
+.markdown code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.markdown pre {
+  overflow-x: auto;
+}

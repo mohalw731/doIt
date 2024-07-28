@@ -7,6 +7,7 @@ import { useChat } from "../../context/ChatContext";
 import useGeminiAi from "../../Hooks/useGeminiAi";
 import { useEffect } from "react";
 import useAdjustHeight from "../../Hooks/useAdjustHeight";
+import remarkGfm from 'remark-gfm';  // Import GitHub flavored markdown
 
 const BrainstormLayout = () => {
   const { user } = useUser();
@@ -28,13 +29,11 @@ const BrainstormLayout = () => {
         )}
 
         <section className="flex-grow flex conversation-container flex-col-reverse gap-3 pb-36 overflow-y-auto">
-          {
-            error && (
-              <div className="flex justify-center items-center">
-                <p className="text-red-500">Something went wrong</p>
-              </div>
-            )
-          }
+          {error && (
+            <div className="flex justify-center items-center">
+              <p className="text-red-500">Something went wrong</p>
+            </div>
+          )}
           <div className="flex-grow flex flex-col gap-3">
             {messages.map((message, index) => (
               <div
@@ -45,15 +44,16 @@ const BrainstormLayout = () => {
               >
                 <div
                   className={`flex md:flex-row flex-col gap-2 items-start ${
-                    message.isUser ? "md:items-start items-end" : ""
+                    message.isUser ? "md:items-start items-end flex-col-reverse" : ""
                   }`}
                 >
                   {message.isUser ? (
                     <>
                       <span
-                        className={` px-4 py-2  rounded-xl max-w-2xl bg-slate-600 text-white`}
+                        className={`px-4 py-2 rounded-xl max-w-2xl bg-slate-600 text-white`}
+                        style={{ overflowWrap: 'break-word', wordWrap: 'break-word', wordBreak: 'break-word' }}
                       >
-                        {message.text}
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
                       </span>
                       <img
                         src={user?.imageUrl || ""}
@@ -70,8 +70,9 @@ const BrainstormLayout = () => {
                       />
                       <span
                         className={`py-2 px-4 rounded-xl max-w-2xl bg-transparent tracking-wide`}
+                        style={{ overflowWrap: 'break-word', wordWrap: 'break-word', wordBreak: 'break-word' }}
                       >
-                        <ReactMarkdown>{message.text}</ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{message.text}</ReactMarkdown>
                       </span>
                     </>
                   )}
@@ -96,7 +97,7 @@ const BrainstormLayout = () => {
           <textarea
             ref={textareaRef}
             rows={1}
-            className="textarea py-4 rounded-full w-full bg-slate-200 text-black overflow-y-auto resize-none"
+            className="textarea py-4 rounded-xl w-full bg-slate-200 text-black overflow-y-auto resize-none"
             placeholder="Let's brainstorm"
             value={input}
             onChange={(e) => setInput(e.target.value)}
