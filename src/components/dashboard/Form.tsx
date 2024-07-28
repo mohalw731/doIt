@@ -7,7 +7,7 @@ import { Input } from "./Input";
 function Form() {
   const { addTodo } = useTodoContext();
   return (
-    <main className=" py-5 md:pt-6 max-w-[600px] mx-auto z-50 pb-14">
+    <main className="py-5  max-w-[600px] mx-auto z-50 pb-14">
       <Quote />
       <Welcome />
       <form

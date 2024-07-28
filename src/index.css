@@ -37,3 +37,56 @@ html {
   left: 0;
   right: 0;
 }
+
+/* Custom scrollbar for webkit browsers (Chrome, Safari, Edge) */
+.conversation-container::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+.conversation-container::-webkit-scrollbar-track {
+  background: transparent; /* Background of the scrollbar track */
+}
+
+.conversation-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Roundness of the scrollbar thumb */
+  border: 3px solid transparent; /* Space around the thumb */
+}
+
+.conversation-container::-webkit-scrollbar-thumb:hover {
+  background: transparent; /* Color when hovering over the scrollbar thumb */
+}
+
+/* Custom scrollbar for Firefox */
+.conversation-container {
+  scrollbar-width: thin; /* Makes the scrollbar thinner */
+  scrollbar-color: transparent transparent; /* thumb color and track color */
+}
+
+
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+
+}
+
+/* Message bubble styling */
+.message-bubble {
+  max-width: 85%;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* User-specific styling */
+.user-bubble {
+  background-color: #1f2937; /* Slate 600 */
+  color: #ffffff;
+}
+
+/* AI-specific styling */
+.ai-bubble {
+  background-color: #e2e8f0; /* Slate 200 */
+}

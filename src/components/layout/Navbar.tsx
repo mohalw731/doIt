@@ -14,7 +14,7 @@ export default function Navbar() {
 
   return (
     <div className="relative">
-      <header className="flex items-center justify-between py-6 z-50">
+      <header className="flex items-center justify-between py-5 z-50">
         <div className="blue-shadow max-w-7xl mx-auto" />
         {!isSignedIn ? (
           <Link to="/about" className="text-slate-600">

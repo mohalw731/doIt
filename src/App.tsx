@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes  } from "react-router-dom";
 import Landing from "./pages/Landing";
 import { useUser } from "@clerk/clerk-react";
 import DashBoard from "./pages/DashBoard";
