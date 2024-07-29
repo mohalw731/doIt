@@ -12,7 +12,7 @@ import InputForm from "./InputForm";
 
 type AIType = 'default' | 'marketer' | 'assistant' | 'programmer' | 'seo-specialist';
 
-const BrainstormLayout = () => {
+const QuillLayout = () => {
   const { user } = useUser();
   const { messages, clearMessages } = useChat();
   const { input, setInput, loading, run, error, setContext, autoMessage } = useGeminiAi();
@@ -49,7 +49,7 @@ const BrainstormLayout = () => {
     <main className="z-50 w-full h-[calc(100dvh-120px)] my-5">
       <section className="max-w-6xl h-full mx-auto relative py-5 flex flex-col">
         {messages.length === 0 && (
-          <div className="md:py-10">
+          <div className="">
             <Welcome />
             <DropdownSelector onSelectChange={handleSelectChange} />
           </div>
@@ -79,4 +79,4 @@ const BrainstormLayout = () => {
   );
 };
 
-export default BrainstormLayout;
+export default QuillLayout;

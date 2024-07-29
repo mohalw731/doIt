@@ -6,10 +6,10 @@ export default function Menu() {
     <>
         <ul className="menu absolute bg-slate-200 border shadow-xl top-[5rem] border-slate-200 rounded-box  left-0 right-0 w-[100%] max-w-7xl mx-auto  py-7 z-[999] md:hidden">
         <li onClick={() => navigate("/")}>
-          <a className="text-xl text-slate-800">Home</a>
+          <a className="text-xl text-slate-800 mb-3">Home</a>
         </li>
-        <li onClick={() => navigate("/brainstorm")}>
-          <a className="text-xl text-slate-800">Brainstorm</a>
+        <li onClick={() => navigate("/quill")}>
+          <a className="text-xl text-slate-800">Quill AI</a>
         </li>
       </ul>
     </>

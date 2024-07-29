@@ -1,7 +1,7 @@
-import BrainstormLayout from "../components/brainstorm/BrainstormLayout";
+import BrainstormLayout from "../components/quill/QuillLayout";
 import Navbar from "../components/layout/Navbar";
 
-export default function BrainStorm() {
+export default function Quill() {
   return (
     <main>
       <Navbar />

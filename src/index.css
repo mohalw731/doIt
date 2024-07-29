@@ -60,7 +60,8 @@ html {
 /* Custom scrollbar for Firefox */
 .conversation-container {
   scrollbar-width: thin; /* Makes the scrollbar thinner */
-  scrollbar-color: transparent transparent; /* thumb color and track color */
+  scrollbar-color: rgb(207, 207, 207) transparent; /* thumb color and track color */
+ padding-right: 20px !important;
 }
 
 
