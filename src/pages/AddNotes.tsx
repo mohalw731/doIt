@@ -1,59 +1,98 @@
-import { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import Navbar from "../components/layout/Navbar";
-import { useAuth } from "@clerk/clerk-react";
-import { addDoc, collection, doc } from "firebase/firestore";
-import { db } from "../configs/Firebase";
+import { useEffect, useState, useCallback } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import Navbar from '../components/layout/Navbar';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '@clerk/clerk-react';
+import { useNotes } from '../context/NotesContext';
+import { toast } from 'react-toastify';
 
 interface Note {
+  id: string;
   title: string;
   body: string;
   userId: string;
-  id: number;
 }
-export default function AddNotes() {
-  const [body, setbody] = useState("");
-  const [title, setTitle] = useState("untitled document");
-  const [notes, setNotes] = useState<Note[]>([]);
+
+export const AddEditNote = () => {
   const { userId } = useAuth();
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { notes, addNote, updateNote } = useNotes();
+  const [title, setTitle] = useState('untitled document');
+  const [body, setBody] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
-  const newNote = {
-    title,
-    body,
-    userId: userId || "",
-    id: Date.now(),
+  useEffect(() => {
+    const note = notes.find(note => note.id === id);
+    if (note) {
+      setTitle(note.title);
+      setBody(note.body);
+      setIsEditing(true);
+    }
+  }, [id, notes]);
+
+  const saveNote = async () => {
+    const note: Note = {
+      id: isEditing ? id! : Date.now().toString(),
+      title,
+      body,
+      userId: userId || '',
+    };
+
+    if( !note.body) {
+      toast.error('Cannot save empty note');
+      return;
+    }
+
+    if (isEditing) {
+      await updateNote(note.id, { title, body });
+    } else {
+      await addNote(note);
+    }
+
+    navigate('/notes');
   };
 
-  const addNote = async () => {
-    await addDoc(collection(db, "notes"), newNote);
-    setNotes([...notes, newNote]);
-    setTitle("");
-    setbody("");
-  };
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    if (event.ctrlKey && event.key === 's') {
+      event.preventDefault();
+      saveNote();
+    }
+  }, [title, body]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
 
   return (
-    <main>
+    <main className='mb-10'>
       <Navbar />
-
       <section>
-        <div className=" flex items-center justify-between">
-          <input type="text" placeholder="Title" className="md:text-3xl font-bold text-slate-800 my-10 bg-transparent outline-none text-lg"  value={title} onChange=
-          {(e) => setTitle(e.target.value)}
-          spellCheck={false}
+        <div className="flex items-center justify-between">
+          <input
+            type="text"
+            placeholder="Title"
+            className="md:text-3xl font-bold text-slate-800 my-10 bg-transparent outline-none text-lg"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            spellCheck={false}
           />
-
-          <button className="btn btn-sm btn-ghost btn-circle" onClick={addNote}>
+          <button className="btn btn-sm btn-ghost btn-circle" onClick={saveNote}>
             save
           </button>
         </div>
         <ReactQuill
           theme="snow"
           value={body}
-          onChange={setbody}
+          onChange={setBody}
+          placeholder="Write your notes..."
           className="h-[calc(100dvh-260px)] rounded-xl custom-quill"
         />
       </section>
     </main>
   );
-}
+};

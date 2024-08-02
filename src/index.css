@@ -129,21 +129,21 @@ html {
 
 
 .custom-quill .ql-container {
-  border: 1px solid #cccccc; /* Set the border to 2px and choose your color */
-  border-radius: 0 0 0.75rem 0.75rem; /* Rounded corners for bottom part */
+  border: 1px solid #cccccc; 
+  border-radius: 0 0 0.75rem 0.75rem; 
 }
 
 .custom-quill .ql-editor {
-  border-radius: 0 0 0.75rem 0.75rem; /* Ensure consistent rounding for the editor */
+  border-radius: 0 0 0.75rem 0.75rem; 
 }
 
 /* Toolbar styling */
 .custom-quill .ql-toolbar.ql-snow {
-  border-top: 1px solid #cccccc; /* Set the border to 2px and match the container color */
-  border-radius: 0.75rem 0.75rem 0 0; /* Rounded corners for the top part */
+  border-top: 1px solid #cccccc; 
+  border-bottom: none;
+  border-radius: 0.75rem 0.75rem 0 0;
 }
 
-/* Optional: Add some padding inside the editor for better look */
 .custom-quill .ql-editor {
   padding: 1rem;
 }
