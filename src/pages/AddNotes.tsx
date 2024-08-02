@@ -76,7 +76,7 @@ export const AddEditNote = () => {
           <input
             type="text"
             placeholder="Title"
-            className="md:text-3xl font-bold text-slate-800 my-10 bg-transparent outline-none text-lg"
+            className="md:text-3xl font-bold text-slate-800 my-10 bg-transparent outline-none text-xl"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             spellCheck={false}
