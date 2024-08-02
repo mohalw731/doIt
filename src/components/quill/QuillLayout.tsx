@@ -26,8 +26,8 @@ const QuillLayout = () => {
     const selectedType = event.target.value as AIType;
 
     const aiContexts: Record<AIType, string> = {
-      default: '',
-      marketer: 'You are an expert marketer.',
+      default: 'your name is doit',
+      marketer: 'your name is doit and you are a marketing expert.',
       assistant: 'You are a professional assistant.',
       programmer: 'You are an expert programmer.',
       'seo-specialist': 'You are an SEO specialist.'
