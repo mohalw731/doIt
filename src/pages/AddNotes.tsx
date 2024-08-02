@@ -69,7 +69,7 @@ export const AddEditNote = () => {
   }, [handleKeyDown]);
 
   return (
-    <main className='mb-10'>
+    <main className='h-[105dvh]'>
       <Navbar />
       <section>
         <div className="flex items-center justify-between">
