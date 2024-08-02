@@ -10,13 +10,13 @@ interface InputFormProps {
   textareaRef: React.RefObject<HTMLTextAreaElement>;
 }
 
-const InputForm: React.FC<InputFormProps> = ({
+const InputForm  =  ({
   input,
   setInput,
   run,
   clearMessages,
   textareaRef,
-}) => {
+}: InputFormProps) => {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
       if (event.key === "Enter" && !event.shiftKey) {

@@ -9,7 +9,7 @@ export default function useGeminiAi() {
   const [error, setError] = useState<boolean>(false);
   const [context, setContext] = useState<string>("");
 
-  const genAI = new GoogleGenerativeAI("AIzaSyAxaPupjEmVFR3dRo68ujhtopHQpN7CZC4");
+  const genAI = new GoogleGenerativeAI("AIzaSyB4ZIRSbcNg-k6ceYV2-3seW2rtEy7_BAQ");
 
   const run = async (e: any) => {
     e.preventDefault();

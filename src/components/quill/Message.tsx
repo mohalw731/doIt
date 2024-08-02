@@ -1,5 +1,4 @@
 // components/Message.tsx
-import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -9,7 +8,7 @@ interface MessageProps {
   avatarUrl: string;
 }
 
-const Message: React.FC<MessageProps> = ({ text, isUser, avatarUrl }) => {
+const Message = ({ text, isUser, avatarUrl }:MessageProps) => {
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`flex md:flex-row flex-col gap-2 items-start ${isUser ? "md:items-start items-end flex-col-reverse" : ""}`}>

@@ -1,5 +1,4 @@
 // components/MessageList.tsx
-import React from 'react';
 import Message from './Message';
 
 interface MessageListProps {
@@ -8,7 +7,7 @@ interface MessageListProps {
   aiAvatarUrl: string;
 }
 
-const MessageList: React.FC<MessageListProps> = ({ messages, userAvatarUrl, aiAvatarUrl }) => {
+const MessageList= ({ messages, userAvatarUrl, aiAvatarUrl }: MessageListProps) => {
   return (
     <div className="flex-grow flex flex-col gap-3">
       {messages.map((message, index) => (
