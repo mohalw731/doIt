@@ -1,4 +1,4 @@
-import Hero from "../components/Hero/Hero";
+import Hero from "../components/ui/Hero";
 import CtaMail from "../components/layout/CtaMail";
 import Footer from "../components/layout/Footer";
 import Navbar from "../components/layout/Navbar";

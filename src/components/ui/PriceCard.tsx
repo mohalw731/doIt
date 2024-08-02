@@ -19,7 +19,7 @@ export default function PriceCard() {
           <span className="block text-gray-600 font-medium mb-6">/per month</span>
           <a
             href="#"
-            className="relative group inline-block w-full py-4 px-6 text-center text-white hover:text-gray-300 hover:opacity-80 bg-slate-800 font-semibold rounded-full overflow-hidden transition duration-200"
+            className="relative group inline-block w-full py-4 px-6 text-center text-white hover:opacity-80 bg-slate-800 font-normal rounded-full overflow-hidden "
           >
             <div className="absolute top-0 right-full w-full h-full bg-slate-800 transform group-hover:translate-x-full group-hover:scale-102 transition duration-500"></div>
             <span className="relative">Get Started</span>

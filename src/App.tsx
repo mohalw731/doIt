@@ -5,6 +5,8 @@ import DashBoard from "./pages/DashBoard";
 import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
 import Quill from "./pages/Quill";
+import Notes from "./pages/Notes";
+import AddNotes from "./pages/AddNotes";
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Route path="/" element={isSignedIn ? <DashBoard /> : <Landing />} />
           <Route path="/about" element={!isSignedIn ? <About /> : <DashBoard />} />
           <Route path="/quill" element={!isSignedIn ? <Landing /> : <Quill />} />
+          <Route path="/notes" element={!isSignedIn ? <Landing /> : <Notes />} />
+          <Route path="/notes/add" element={!isSignedIn ? <Landing /> : <AddNotes />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer/>

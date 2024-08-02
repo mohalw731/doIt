@@ -2,11 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;  
-  transition: all 0.7s ease;
+  box-sizing: border-box;
+  transition: all 0.5s ease;
   scroll-behavior: smooth;
 }
 
@@ -40,28 +40,36 @@ html {
 
 /* Custom scrollbar for webkit browsers (Chrome, Safari, Edge) */
 .conversation-container::-webkit-scrollbar {
-  width: 12px; /* Width of the scrollbar */
+  width: 12px;
+  /* Width of the scrollbar */
 }
 
 .conversation-container::-webkit-scrollbar-track {
-  background: transparent; /* Background of the scrollbar track */
+  background: transparent;
+  /* Background of the scrollbar track */
 }
 
 .conversation-container::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Roundness of the scrollbar thumb */
-  border: 3px solid transparent; /* Space around the thumb */
+  background-color: transparent;
+  /* Color of the scrollbar thumb */
+  border-radius: 10px;
+  /* Roundness of the scrollbar thumb */
+  border: 3px solid transparent;
+  /* Space around the thumb */
 }
 
 .conversation-container::-webkit-scrollbar-thumb:hover {
-  background: transparent; /* Color when hovering over the scrollbar thumb */
+  background: transparent;
+  /* Color when hovering over the scrollbar thumb */
 }
 
 /* Custom scrollbar for Firefox */
 .conversation-container {
-  scrollbar-width: thin; /* Makes the scrollbar thinner */
-  scrollbar-color: rgb(207, 207, 207) transparent; /* thumb color and track color */
- padding-right: 20px !important;
+  scrollbar-width: thin;
+  /* Makes the scrollbar thinner */
+  scrollbar-color: rgb(207, 207, 207) transparent;
+  /* thumb color and track color */
+  padding-right: 20px !important;
 }
 
 
@@ -83,13 +91,15 @@ html {
 
 /* User-specific styling */
 .user-bubble {
-  background-color: #1f2937; /* Slate 600 */
+  background-color: #1f2937;
+  /* Slate 600 */
   color: #ffffff;
 }
 
 /* AI-specific styling */
 .ai-bubble {
-  background-color: #e2e8f0; /* Slate 200 */
+  background-color: #e2e8f0;
+  /* Slate 200 */
 }
 
 
@@ -100,8 +110,10 @@ html {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .textarea {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 
@@ -113,4 +125,25 @@ html {
 
 .markdown pre {
   overflow-x: auto;
+}
+
+
+.custom-quill .ql-container {
+  border: 1px solid #cccccc; /* Set the border to 2px and choose your color */
+  border-radius: 0 0 0.75rem 0.75rem; /* Rounded corners for bottom part */
+}
+
+.custom-quill .ql-editor {
+  border-radius: 0 0 0.75rem 0.75rem; /* Ensure consistent rounding for the editor */
+}
+
+/* Toolbar styling */
+.custom-quill .ql-toolbar.ql-snow {
+  border-top: 1px solid #cccccc; /* Set the border to 2px and match the container color */
+  border-radius: 0.75rem 0.75rem 0 0; /* Rounded corners for the top part */
+}
+
+/* Optional: Add some padding inside the editor for better look */
+.custom-quill .ql-editor {
+  padding: 1rem;
 }

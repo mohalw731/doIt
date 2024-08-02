@@ -67,6 +67,12 @@ export default function Navbar() {
               </button>
             </Link>
 
+            <Link to="/notes" className="text-slate-600">
+              <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
+               Notes
+              </button>
+            </Link>
+
             <Link to="/quill" className="text-slate-600">
               <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
                 Quill AI
