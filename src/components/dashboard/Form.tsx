@@ -3,6 +3,7 @@ import Welcome from "../layout/Welcome";
 import { useTodoContext } from "../../context/TodoContext";
 import Quote from "./Quote";
 import { Input } from "./Input";
+import CategoryList from "./CategoryList";
 
 function Form() {
   const { addTodo } = useTodoContext();
@@ -18,6 +19,7 @@ function Form() {
         className="max-w-[600px]"
       >
         <Input />
+        <CategoryList />
         <TodoList />
       </form>
     </main>

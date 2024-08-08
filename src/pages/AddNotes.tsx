@@ -1,11 +1,11 @@
-import { useEffect, useState, useCallback } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import Navbar from '../components/layout/Navbar';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '@clerk/clerk-react';
-import { useNotes } from '../context/NotesContext';
-import { toast } from 'react-toastify';
+import { useEffect, useState, useCallback } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import Navbar from "../components/layout/Navbar";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
+import { useNotes } from "../context/NotesContext";
+import { toast } from "react-toastify";
 
 interface Note {
   id: string;
@@ -19,12 +19,12 @@ export const AddEditNote = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { notes, addNote, updateNote } = useNotes();
-  const [title, setTitle] = useState('untitled document');
-  const [body, setBody] = useState('');
+  const [title, setTitle] = useState("untitled document");
+  const [body, setBody] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const note = notes.find(note => note.id === id);
+    const note = notes.find((note) => note.id === id);
     if (note) {
       setTitle(note.title);
       setBody(note.body);
@@ -37,11 +37,11 @@ export const AddEditNote = () => {
       id: isEditing ? id! : Date.now().toString(),
       title,
       body,
-      userId: userId || '',
+      userId: userId || "",
     };
 
-    if( !note.body) {
-      toast.error('Cannot save empty note');
+    if (!note.body) {
+      toast.error("Cannot save empty note");
       return;
     }
 
@@ -51,25 +51,28 @@ export const AddEditNote = () => {
       await addNote(note);
     }
 
-    navigate('/notes');
+    navigate("/notes");
   };
 
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    if (event.ctrlKey && event.key === 's') {
-      event.preventDefault();
-      saveNote();
-    }
-  }, [title, body]);
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.key === "s") {
+        event.preventDefault();
+        saveNote();
+      }
+    },
+    [title, body]
+  );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
 
   return (
-    <main className='h-[105dvh]'>
+    <main className="h-[105dvh]">
       <Navbar />
       <section>
         <div className="flex items-center justify-between">
@@ -81,7 +84,10 @@ export const AddEditNote = () => {
             onChange={(e) => setTitle(e.target.value)}
             spellCheck={false}
           />
-          <button className="btn btn-sm btn-ghost btn-circle" onClick={saveNote}>
+          <button
+            className="btn btn-sm btn-ghost btn-circle"
+            onClick={saveNote}
+          >
             save
           </button>
         </div>

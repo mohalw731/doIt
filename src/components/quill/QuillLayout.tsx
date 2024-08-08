@@ -10,12 +10,18 @@ import DropdownSelector from "./DropdownSelector";
 import MessageList from "./MessageList";
 import InputForm from "./InputForm";
 
-type AIType = 'default' | 'marketer' | 'assistant' | 'programmer' | 'seo-specialist';
+type AIType =
+  | "default"
+  | "marketer"
+  | "assistant"
+  | "programmer"
+  | "seo-specialist";
 
 const QuillLayout = () => {
   const { user } = useUser();
   const { messages, clearMessages } = useChat();
-  const { input, setInput, loading, run, error, setContext, autoMessage } = useGeminiAi();
+  const { input, setInput, loading, run, error, setContext, autoMessage } =
+    useGeminiAi();
   const { textareaRef, adjustTextareaHeight } = useAdjustHeight();
 
   useEffect(() => {
@@ -26,19 +32,19 @@ const QuillLayout = () => {
     const selectedType = event.target.value as AIType;
 
     const aiContexts: Record<AIType, string> = {
-      default: 'your name is doit',
-      marketer: 'your name is doit and you are a marketing expert.',
-      assistant: 'You are a professional assistant.',
-      programmer: 'You are an expert programmer.',
-      'seo-specialist': 'You are an SEO specialist.'
+      default: "your name is doit",
+      marketer: "your name is doit and you are a marketing expert.",
+      assistant: "You are a professional assistant.",
+      programmer: "You are an expert programmer.",
+      "seo-specialist": "You are an SEO specialist.",
     };
 
     const initialPrompts: Record<AIType, string> = {
-      marketer: 'What about marketing do you need help with?',
-      assistant: 'How can I assist you today?',
-      programmer: 'What programming question do you have?',
-      'seo-specialist': 'What SEO concerns do you need help with?',
-      default: '' // Adding default to initialPrompts for consistency
+      marketer: "What about marketing do you need help with?",
+      assistant: "How can I assist you today?",
+      programmer: "What programming question do you have?",
+      "seo-specialist": "What SEO concerns do you need help with?",
+      default: "", // Adding default to initialPrompts for consistency
     };
 
     setContext(aiContexts[selectedType]);
@@ -60,10 +66,16 @@ const QuillLayout = () => {
               <p className="text-red-500">Something went wrong</p>
             </div>
           )}
-          <MessageList messages={messages} userAvatarUrl={user?.imageUrl || ""} aiAvatarUrl={lol} />
+          <MessageList
+            messages={messages}
+            userAvatarUrl={user?.imageUrl || ""}
+            aiAvatarUrl={lol}
+          />
           {loading && (
             <div className="flex justify-start gap-3">
-              <span className="py-2 px-4 rounded-xl bg-slate-200">Loading...</span>
+              <span className="py-2 px-4 rounded-xl bg-slate-200">
+                Loading...
+              </span>
             </div>
           )}
         </section>

@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useChat } from '../context/ChatContext';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { useState } from "react";
+import { useChat } from "../context/ChatContext";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function useGeminiAi() {
   const { messages, addMessage } = useChat();
@@ -9,7 +9,9 @@ export default function useGeminiAi() {
   const [error, setError] = useState<boolean>(false);
   const [context, setContext] = useState<string>("");
 
-  const genAI = new GoogleGenerativeAI("AIzaSyB4ZIRSbcNg-k6ceYV2-3seW2rtEy7_BAQ");
+  const genAI = new GoogleGenerativeAI(
+    "AIzaSyB4ZIRSbcNg-k6ceYV2-3seW2rtEy7_BAQ"
+  );
 
   const run = async (e: any) => {
     e.preventDefault();
@@ -22,7 +24,9 @@ export default function useGeminiAi() {
 
     try {
       // Combine the history of messages into a single input string
-      const messageHistory = messages.map(msg => `${msg.isUser ? 'User' : 'AI'}: ${msg.text}`).join('\n');
+      const messageHistory = messages
+        .map((msg) => `${msg.isUser ? "User" : "AI"}: ${msg.text}`)
+        .join("\n");
       const fullInput = `${context}\n${messageHistory}\nUser: ${input}`;
 
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -30,7 +34,6 @@ export default function useGeminiAi() {
       const text = await result.response.text();
       const aiMessage = { text, isUser: false };
       addMessage(aiMessage);
-      
     } catch (error) {
       setError(true);
       setTimeout(() => {
@@ -53,6 +56,6 @@ export default function useGeminiAi() {
     run,
     error,
     setContext,
-    autoMessage
+    autoMessage,
   };
 }
