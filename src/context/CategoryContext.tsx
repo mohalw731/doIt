@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, query, where, onSnapshot, Timestamp } from 'firebase/firestore';
 import { useAuth } from '@clerk/clerk-react';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
@@ -9,7 +9,7 @@ interface Category {
   name: string;
   id: string;
   userId: string;
-  createdAt: Date; // Add createdAt field
+  createdAt: Date; // Ensure this is a Date object
 }
 
 interface CategoryContextType {
@@ -91,7 +91,6 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
       await addDoc(collection(db, "categories"), newCategory);
 
-      setCategories((prevCategories) => [...prevCategories, newCategory]);
       setCategory("");
       setIsOpen(false);
     } catch (error: any) {
@@ -99,25 +98,32 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const handleGetCategories = async () => {
+  const handleGetCategories = () => {
     if (!userId) return;
 
     const allTasksCategory = {
       name: "All tasks",
       userId: userId || "",
       id: uuidv4(),
-      createdAt: new Date(), // Add timestamp here
+      createdAt: new Date(),
     };
 
     const categoriesQuery = query(collection(db, "categories"), where("userId", "==", userId));
-    try {
-      const querySnapshot = await getDocs(categoriesQuery);
+
+    // Set up real-time listener
+    const unsubscribe = onSnapshot(categoriesQuery, async (querySnapshot) => {
       const categoriesData: Category[] = [];
       let allTasksExists = false;
 
       querySnapshot.forEach((doc) => {
         const category = doc.data() as Category;
         category.id = doc.id;
+
+        // Convert Firestore Timestamp to JavaScript Date
+        if (category.createdAt instanceof Timestamp) {
+          category.createdAt = category.createdAt.toDate();
+        }
+
         if (category.name === "All tasks") {
           allTasksExists = true;
         } else {
@@ -134,9 +140,10 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const sortedCategories = [allTasksCategory, ...categoriesData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())];
 
       setCategories(sortedCategories);
-    } catch (error) {
-      toast.error("Failed to fetch categories");
-    }
+    });
+
+    // Return the unsubscribe function to stop listening when the component unmounts
+    return unsubscribe;
   };
 
   const handleDeleteCategory = async (id: string) => {
@@ -148,7 +155,6 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const categoryRef = doc(db, "categories", id);
       await deleteDoc(categoryRef);
-      setCategories(categories.filter(cat => cat.id !== id));
       toast.success("Category deleted successfully");
     } catch (error: any) {
       toast.error("Failed to delete category");
@@ -156,7 +162,13 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   useEffect(() => {
-    handleGetCategories();
+    // Initialize real-time listener
+    const unsubscribe = handleGetCategories();
+
+    // Clean up real-time listener when the component unmounts or userId changes
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, [userId]);
 
   return (
