@@ -9,7 +9,7 @@ import { db } from "../configs/Firebase";
 
 interface TodoContextType {
   todos: Todo[];
-  addTodo: () => void;
+  addTodo: (categoryId: string) => void; // Updated to accept categoryId
   setTodoText: React.Dispatch<React.SetStateAction<string>>;
   todoText: string;
   toggleCompleted: (id: string) => void;
@@ -33,7 +33,6 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useAuth();
 
-  // Set up a real-time listener for todos when userId changes
   useEffect(() => {
     if (!userId) return;
 
@@ -44,18 +43,19 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
         text: doc.data().text,
         completed: doc.data().completed,
         userId: doc.data().userId,
+        categoryId: doc.data().categoryId // Assuming your Todo type has categoryId
       }));
       setTodos(fetchedTodos);
       setLoading(false);
+      console.log(fetchedTodos);
     }, (error) => {
       console.error("Error fetching todos: ", error);
     });
 
-    // Clean up the listener on unmount
     return () => unsubscribe();
   }, [userId]);
 
-  const addTodo = async () => {
+  const addTodo = async (categoryId: string) => { // Accept categoryId
     if (!todoText) {
       toast.error("Please enter a task");
       return;
@@ -66,6 +66,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
         text: todoText,
         completed: false,
         userId: userId || "",
+        categoryId // Include categoryId
       };
 
       await addDoc(collection(db, "todos"), newTodo);
@@ -98,7 +99,6 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Memoized context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     todos,
     addTodo,

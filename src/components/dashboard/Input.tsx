@@ -1,17 +1,26 @@
+import { useState } from "react";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useTodoContext } from "../../context/TodoContext";
 import { useCategory } from "../../context/CategoryContext";
 
 export const Input = () => {
   const { todoText, setTodoText, addTodo } = useTodoContext();
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const { categories } = useCategory();
+
+  const handleAddTodo = () => {
+    addTodo(selectedCategory); 
+    setTodoText("");
+    setSelectedCategory("");
+  };
+
   return (
     <>
-      <div className="relative ">
+      <div className="relative">
         <input
           type="text"
           value={todoText}
-          className="input py-7 rounded-xl  w-full bg-slate-200 text-slate-600"
+          className="input py-7 rounded-xl w-full bg-slate-200 text-slate-600"
           placeholder="Write a new task"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setTodoText(e.target.value)
@@ -21,7 +30,11 @@ export const Input = () => {
         />
         {todoText.length > 0 && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
-            <select className="select  md:select-md select-md bg-slate-200  w-[115px] text-slate-600">
+            <select
+              className="select md:select-md select-md bg-slate-200 w-[115px] text-slate-600"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -30,7 +43,7 @@ export const Input = () => {
             </select>
             <PlusIcon
               className="absolute right-3 top-1/2 -translate-y-1/2 size-7 bg-slate-200 text-slate-400 cursor-pointer"
-              onClick={addTodo}
+              onClick={handleAddTodo}
             />
           </div>
         )}
