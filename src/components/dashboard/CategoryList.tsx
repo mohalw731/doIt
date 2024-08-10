@@ -1,4 +1,3 @@
-// CategoryList.tsx
 import { PlusIcon } from "@radix-ui/react-icons";
 import AddCategory from "./AddCategory";
 import { useCategory } from "../../context/CategoryContext";
@@ -15,7 +14,9 @@ export default function CategoryList({
       <ul className="flex flex-wrap gap-3">
         <li
           className="bg-slate-200 text-slate-600 py-3 px-4 rounded-xl hover:bg-slate-300 cursor-pointer hover:scale-105"
-          onClick={() => setSelectedCategory("")}
+          onClick={() => {
+            setSelectedCategory("")
+          }}
         >
           All Tasks
         </li>
@@ -26,6 +27,7 @@ export default function CategoryList({
             onDoubleClick={() => handleDeleteCategory(category.id)}
             onClick={() => {
               setSelectedCategory(category.id);
+              // Optionally, you can set the selected category emoji here if needed
             }}
           >
             {category.name}

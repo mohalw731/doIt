@@ -1,10 +1,20 @@
+import React, { useState } from "react";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { useCategory } from "../../context/CategoryContext";
 
-export default function AddCategory() {
-  const { category, setCategory, error, handleAddCategory, setIsOpen, isOpen } = useCategory();
+const AddCategory: React.FC = () => {
+  const { category, setCategory, error, handleAddCategory, setIsOpen, isOpen, setEmoji, emoji } = useCategory();
+  const [isOpenEmoji, setIsOpenEmoji] = useState<boolean>(false);
+
+  const handleEmojiSelect = (emoji: any) => {
+    setEmoji(emoji.native);
+    setIsOpenEmoji(false);
+  };
+
   return (
-    <main className={`${isOpen ? "overlay" : ""}`}>
+    <main className={`${isOpen ? "overlay" : ""} flex flex-col relative`}>
       <section className="bg-slate-200 text-slate-600 p-5 rounded-xl max-w-lg w-full flex flex-col mx-5">
         <div className="flex items-center justify-between pb-10">
           <h2 className="text-xl font-bold">Add Category</h2>
@@ -24,6 +34,13 @@ export default function AddCategory() {
           {error.error && (
             <p className="text-red-500 text-sm mb-5 mt-1">{error.message}</p>
           )}
+
+          <div
+            className="bg-slate-100 rounded-xl max-w-10 p-2 flex items-center flex-col justify-center cursor-pointer hover:bg-slate-300"
+            onClick={() => setIsOpenEmoji(!isOpenEmoji)}
+          >
+            <span>{emoji}</span>
+          </div>
           <div className="pb-5">
             <a
               className="py-3 px-4 font-normal rounded-xl text-white hover:opacity-80 bg-slate-800 text-sm cursor-pointer hover:scale-105"
@@ -33,7 +50,11 @@ export default function AddCategory() {
             </a>
           </div>
         </div>
+
+        {isOpenEmoji && <Picker className="absolute" data={data} onEmojiSelect={handleEmojiSelect} />}
       </section>
     </main>
   );
-}
+};
+
+export default AddCategory;

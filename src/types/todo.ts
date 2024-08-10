@@ -5,4 +5,6 @@ export interface Todo {
   completed: boolean;
   userId: string;
   categoryId?: string; // Optional categoryId
+  emoji: string;
+  createdAt: Date;
 }

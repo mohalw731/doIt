@@ -5,12 +5,12 @@ import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../configs/Firebase';
 
-
 interface Category {
   name: string;
   id: string;
   userId: string;
-  createdAt: Date; // Add createdAt field
+  createdAt: Date;
+  emoji: string;
 }
 
 interface CategoryContextType {
@@ -22,6 +22,11 @@ interface CategoryContextType {
   handleDeleteCategory: (id: string) => void;
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  emoji: string;
+  setEmoji: React.Dispatch<React.SetStateAction<string>>;
+  selectedCategoryEmoji: string;
+  setSelectedCategoryEmoji: React.Dispatch<React.SetStateAction<string>>;
+  hanldeSelectedCategoryEmoji: (category: string) => void;
 }
 
 const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
@@ -30,6 +35,8 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [categories, setCategories] = useState<Category[]>([]);
   const [category, setCategory] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [emoji, setEmoji] = useState<string>("🔥");
+  const [selectedCategoryEmoji, setSelectedCategoryEmoji] = useState<string>("");
   const [error, setError] = useState<{ message: string; error: boolean }>({
     message: "",
     error: false,
@@ -58,6 +65,14 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setTimeout(() => setError({ message: "", error: false }), 3000);
       return false;
     }
+    if (category === "All tasks") {
+      setError({
+        message: `Category name "All tasks" is reserved`,
+        error: true,
+      });
+      setTimeout(() => setError({ message: "", error: false }), 3000);
+      return false;
+    }
     if (categories.some((cat) => cat.name === category)) {
       setError({ message: "Category name already exists", error: true });
       setTimeout(() => setError({ message: "", error: false }), 3000);
@@ -71,6 +86,11 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     return true;
   };
 
+  const hanldeSelectedCategoryEmoji = (category: string) => {
+    setSelectedCategoryEmoji(category);
+    console.log(category); // This should log the category parameter
+  };
+
   const handleAddCategory = async () => {
     if (!formValidation()) return;
 
@@ -79,7 +99,8 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         name: category,
         userId: userId || "",
         id: uuidv4(),
-        createdAt: new Date(), // Add timestamp here
+        createdAt: new Date(),
+        emoji: emoji
       };
 
       await addDoc(collection(db, "categories"), newCategory);
@@ -93,52 +114,50 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const handleGetCategories = () => {
     if (!userId) return;
-  
+
     const categoriesQuery = query(collection(db, "categories"), where("userId", "==", userId));
-  
+
     const unsubscribe = onSnapshot(categoriesQuery, (querySnapshot) => {
       const categoriesData: Category[] = [];
-  
+
       querySnapshot.forEach((doc) => {
         const category = doc.data() as Category;
         category.id = doc.id;
-        categoriesData.push(category); // Add the category to the array
+        categoriesData.push(category);
       });
-  
+
       setCategories(categoriesData);
+
     });
-  
+
     // Return the unsubscribe function to stop listening when the component unmounts
     return () => unsubscribe();
   };
-  
 
   const handleDeleteCategory = async (id: string) => {
-  
     try {
       // Delete all tasks associated with this category
       const todosQuery = query(collection(db, "todos"), where("categoryId", "==", id));
       const querySnapshot = await getDocs(todosQuery);
-  
+
       const batch = writeBatch(db);
       querySnapshot.forEach((doc) => {
         batch.delete(doc.ref);
       });
-  
+
       // Commit the batch delete
       await batch.commit();
-  
+
       // Now delete the category
       const categoryRef = doc(db, "categories", id);
       await deleteDoc(categoryRef);
-  
+
       setCategories(categories.filter(cat => cat.id !== id));
       toast.success("Category and associated tasks deleted successfully");
     } catch (error: any) {
       toast.error("Failed to delete category and associated tasks");
     }
   };
-  
 
   useEffect(() => {
     handleGetCategories();
@@ -146,7 +165,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   return (
     <CategoryContext.Provider
-      value={{ categories, category, setCategory, error, handleAddCategory, handleDeleteCategory, setIsOpen, isOpen }}
+      value={{ categories, category, setCategory, error, handleAddCategory, handleDeleteCategory, setIsOpen, isOpen, setEmoji, emoji, selectedCategoryEmoji, setSelectedCategoryEmoji, hanldeSelectedCategoryEmoji,  }}
     >
       {children}
     </CategoryContext.Provider>
