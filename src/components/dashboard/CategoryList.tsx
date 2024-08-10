@@ -1,6 +1,8 @@
+// CategoryList.tsx
 import { PlusIcon } from "@radix-ui/react-icons";
 import AddCategory from "./AddCategory";
-import { useCategory } from "../../context/CategoryContext";
+import { useCategory } from "../../context/CategoryContext"; 
+
 
 export default function CategoryList() {
   const { categories, handleDeleteCategory, isOpen, setIsOpen } = useCategory();
@@ -23,7 +25,11 @@ export default function CategoryList() {
         className="size-7 text-slate-400 cursor-pointer"
         onClick={() => setIsOpen(true)}
       />
-      {isOpen && <AddCategory />}
+      {isOpen && (
+        <AddCategory
+
+        />
+      )}
     </main>
   );
 }

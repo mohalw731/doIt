@@ -1,17 +1,18 @@
-import { useState } from "react";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useTodoContext } from "../../context/TodoContext";
 import { useCategory } from "../../context/CategoryContext";
 
-export const Input = () => {
+export const Input = ({selectedCategory, setSelectedCategory}: {
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+}) => {
   const { todoText, setTodoText, addTodo } = useTodoContext();
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const { categories } = useCategory();
 
   const handleAddTodo = () => {
-    addTodo(selectedCategory); 
+    addTodo(selectedCategory); // Pass the selected category to addTodo
     setTodoText("");
-    setSelectedCategory("");
+    setSelectedCategory(""); // Clear selected category after adding
   };
 
   return (

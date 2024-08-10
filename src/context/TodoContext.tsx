@@ -9,7 +9,7 @@ import { db } from "../configs/Firebase";
 
 interface TodoContextType {
   todos: Todo[];
-  addTodo: (categoryId: string) => void; // Updated to accept categoryId
+  addTodo: (categoryId: string) => void;
   setTodoText: React.Dispatch<React.SetStateAction<string>>;
   todoText: string;
   toggleCompleted: (id: string) => void;
@@ -27,12 +27,14 @@ export function useTodoContext() {
   return context;
 }
 
-export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoText, setTodoText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const { userId } = useAuth();
 
+  console.log(todos)
+  // Set up a real-time listener for todos when userId changes
   useEffect(() => {
     if (!userId) return;
 
@@ -43,19 +45,21 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
         text: doc.data().text,
         completed: doc.data().completed,
         userId: doc.data().userId,
-        categoryId: doc.data().categoryId // Assuming your Todo type has categoryId
+        categoryId: doc.data().categoryId
       }));
       setTodos(fetchedTodos);
       setLoading(false);
-      console.log(fetchedTodos);
     }, (error) => {
       console.error("Error fetching todos: ", error);
     });
-
+    // Clean up the listener on unmount
     return () => unsubscribe();
+
+
+
   }, [userId]);
 
-  const addTodo = async (categoryId: string) => { // Accept categoryId
+  const addTodo = async (categoryId: string) => {
     if (!todoText) {
       toast.error("Please enter a task");
       return;
@@ -66,7 +70,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
         text: todoText,
         completed: false,
         userId: userId || "",
-        categoryId // Include categoryId
+        categoryId: categoryId || "",
       };
 
       await addDoc(collection(db, "todos"), newTodo);
@@ -74,6 +78,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       toast.error(error.message);
     }
+
   };
 
   const toggleCompleted = async (id: string) => {
@@ -99,6 +104,8 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+
+  // Memoized context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({
     todos,
     addTodo,
