@@ -10,12 +10,12 @@ export default function CategoryList({
   const { categories, handleDeleteCategory, isOpen, setIsOpen } = useCategory();
 
   return (
-    <main className="pt-5 flex items-center justify-between">
-      <ul className="flex flex-wrap gap-3">
+    <main className="pt-5 flex flex-wrap items-start gap-3">
+      <ul className="flex flex-wrap gap-5 flex-grow items-center">
         <li
           className="bg-slate-200 text-slate-600 py-3 px-4 rounded-xl hover:bg-slate-300 cursor-pointer hover:scale-105"
           onClick={() => {
-            setSelectedCategory("")
+            setSelectedCategory("");
           }}
         >
           All Tasks
@@ -27,18 +27,18 @@ export default function CategoryList({
             onDoubleClick={() => handleDeleteCategory(category.id)}
             onClick={() => {
               setSelectedCategory(category.id);
-              // Optionally, you can set the selected category emoji here if needed
             }}
           >
             {category.name}
           </li>
         ))}
+
+        <PlusIcon
+          className="size-7 text-slate-400 cursor-pointer hover:text-slate-600  btn btn-sm btn-ghost btn-circle"
+          onClick={() => setIsOpen(true)}
+        />
       </ul>
 
-      <PlusIcon
-        className="size-7 text-slate-400 cursor-pointer"
-        onClick={() => setIsOpen(true)}
-      />
       {isOpen && <AddCategory />}
     </main>
   );
