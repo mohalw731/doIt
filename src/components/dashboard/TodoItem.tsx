@@ -12,7 +12,7 @@ function TodoItem({ todo }: { todo: Todo }) {
       onClick={() => toggleCompleted(todo.id)}
       onDoubleClick={() => handleDeleteTodos(todo.id)}
     >
-      <div className=" flex items-center gap-2">
+      <div className=" flex items-center gap-6">
         <span>{todo.emoji}</span>
         <span>{todo.text}</span>
       </div>
