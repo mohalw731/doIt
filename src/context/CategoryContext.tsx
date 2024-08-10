@@ -78,7 +78,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setTimeout(() => setError({ message: "", error: false }), 3000);
       return false;
     }
-    if (categories.length >= 5) {
+    if (categories.length >= 4) {
       setError({ message: "Category limit reached", error: true });
       setTimeout(() => setError({ message: "", error: false }), 3000);
       return false;
