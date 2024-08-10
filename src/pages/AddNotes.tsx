@@ -7,6 +7,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useNotes } from "../context/NotesContext";
 import { toast } from "react-toastify";
 
+
 interface Note {
   id: string;
   title: string;
@@ -98,7 +99,11 @@ export const AddEditNote = () => {
           placeholder="Write your notes..."
           className="h-[calc(100dvh-260px)] rounded-xl custom-quill"
         />
+
       </section>
     </main>
   );
 };
+
+
+
