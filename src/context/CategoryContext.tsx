@@ -153,7 +153,6 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       await deleteDoc(categoryRef);
 
       setCategories(categories.filter(cat => cat.id !== id));
-      toast.success("Category and associated tasks deleted successfully");
     } catch (error: any) {
       toast.error("Failed to delete category and associated tasks");
     }
