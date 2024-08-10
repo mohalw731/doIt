@@ -22,8 +22,8 @@ function Form() {
         className="max-w-[700px]"
       >
         <Input selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}/>
-        <CategoryList />
-        <TodoList />
+        <CategoryList setSelectedCategory={setSelectedCategory} />
+        <TodoList selectedCategory={selectedCategory}/>
       </form>
     </main>
   );

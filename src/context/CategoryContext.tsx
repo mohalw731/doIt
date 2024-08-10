@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { addDoc, collection, deleteDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, where, writeBatch } from 'firebase/firestore';
 import { useAuth } from '@clerk/clerk-react';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../configs/Firebase';
-import { Timestamp } from 'firebase/firestore'; // Import Timestamp from Firestore
 
 
 interface Category {
@@ -59,14 +58,6 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setTimeout(() => setError({ message: "", error: false }), 3000);
       return false;
     }
-    if (category === "All tasks") {
-      setError({
-        message: `Category name "All tasks" is reserved`,
-        error: true,
-      });
-      setTimeout(() => setError({ message: "", error: false }), 3000);
-      return false;
-    }
     if (categories.some((cat) => cat.name === category)) {
       setError({ message: "Category name already exists", error: true });
       setTimeout(() => setError({ message: "", error: false }), 3000);
@@ -103,44 +94,18 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const handleGetCategories = () => {
     if (!userId) return;
   
-    const allTasksCategory = {
-      name: "All tasks",
-      userId: userId || "",
-      id: uuidv4(),
-      createdAt: new Date(),
-    };
-  
     const categoriesQuery = query(collection(db, "categories"), where("userId", "==", userId));
   
-    const unsubscribe = onSnapshot(categoriesQuery, async (querySnapshot) => {
+    const unsubscribe = onSnapshot(categoriesQuery, (querySnapshot) => {
       const categoriesData: Category[] = [];
-      let allTasksExists = false;
   
       querySnapshot.forEach((doc) => {
         const category = doc.data() as Category;
         category.id = doc.id;
-  
-        // Convert Firestore Timestamp to JavaScript Date
-        if (category.createdAt instanceof Timestamp) {
-          category.createdAt = category.createdAt.toDate();
-        }
-  
-        if (category.name === "All tasks") {
-          allTasksExists = true;
-        } else {
-          categoriesData.push(category);
-        }
+        categoriesData.push(category); // Add the category to the array
       });
   
-      if (!allTasksExists) {
-        await addDoc(collection(db, "categories"), allTasksCategory);
-        categoriesData.push(allTasksCategory);
-      }
-  
-      // Sort categories with "All tasks" at the beginning and other categories by creation time
-      const sortedCategories = [allTasksCategory, ...categoriesData.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())];
-  
-      setCategories(sortedCategories);
+      setCategories(categoriesData);
     });
   
     // Return the unsubscribe function to stop listening when the component unmounts
@@ -149,20 +114,31 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   
 
   const handleDeleteCategory = async (id: string) => {
-    const categoryToDelete = categories.find(cat => cat.id === id);
-    if (categoryToDelete?.name === "All tasks") {
-      toast.error("Cannot delete the initial task");
-      return;
-    }
+  
     try {
+      // Delete all tasks associated with this category
+      const todosQuery = query(collection(db, "todos"), where("categoryId", "==", id));
+      const querySnapshot = await getDocs(todosQuery);
+  
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+  
+      // Commit the batch delete
+      await batch.commit();
+  
+      // Now delete the category
       const categoryRef = doc(db, "categories", id);
       await deleteDoc(categoryRef);
+  
       setCategories(categories.filter(cat => cat.id !== id));
-      toast.success("Category deleted successfully");
+      toast.success("Category and associated tasks deleted successfully");
     } catch (error: any) {
-      toast.error("Failed to delete category");
+      toast.error("Failed to delete category and associated tasks");
     }
   };
+  
 
   useEffect(() => {
     handleGetCategories();

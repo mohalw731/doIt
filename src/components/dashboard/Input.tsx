@@ -36,6 +36,7 @@ export const Input = ({selectedCategory, setSelectedCategory}: {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
+              <option value="" defaultChecked>All tasks</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
