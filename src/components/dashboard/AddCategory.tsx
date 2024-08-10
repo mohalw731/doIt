@@ -14,8 +14,8 @@ const AddCategory: React.FC = () => {
   };
 
   return (
-    <main className={`${isOpen ? "overlay" : ""} flex flex-col relative`}>
-      <section className="bg-slate-200 text-slate-600 p-5 rounded-xl max-w-lg w-full flex flex-col mx-5">
+    <main className={`${isOpen ? "overlay px-2" : ""} flex flex-col relative`}>
+      <section className="bg-slate-200 text-slate-600 p-5 rounded-xl max-w-lg w-full flex flex-col">
         <div className="flex items-center justify-between pb-10">
           <h2 className="text-xl font-bold">Add Category</h2>
           <Cross2Icon
@@ -36,7 +36,7 @@ const AddCategory: React.FC = () => {
           )}
 
           <div
-            className="bg-slate-100 rounded-xl max-w-10 p-2 flex items-center flex-col justify-center cursor-pointer hover:bg-slate-300"
+            className={`bg-slate-100 rounded-xl max-w-10 p-2 flex items-center flex-col justify-center cursor-pointer hover:bg-slate-300 ${error.error && "mb-5"}`}
             onClick={() => setIsOpenEmoji(!isOpenEmoji)}
           >
             <span>{emoji}</span>
