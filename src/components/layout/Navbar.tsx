@@ -69,7 +69,7 @@ export default function Navbar() {
 
             <Link to="/notes" className="text-slate-600">
               <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
-               Notes
+                Notes
               </button>
             </Link>
 
