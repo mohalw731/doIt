@@ -1,33 +1,33 @@
 import { BrowserRouter, Route, Routes  } from "react-router-dom";
 import Landing from "./pages/Landing";
-import { useUser } from "@clerk/clerk-react";
 import DashBoard from "./pages/DashBoard";
 import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
 import Quill from "./pages/Quill";
-import { AddEditNote } from "./pages/AddNotes";
+// import { AddEditNote } from "./pages/AddNotes";
 import { NotesList } from "./components/notes/NotesList";
-
 import NotFoundPage from "./pages/NotFoundPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import AddNotes from "./pages/AddNotes";
+import useUserDetails from "./Functions/useUserDeatils";
 
 
 function App() {
-  const { isSignedIn } = useUser();
+  const { isLoggedIn } = useUserDetails();
 
   return (
     <main>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isSignedIn ? <DashBoard /> : <Landing />} />
-          <Route path="/sign-in" element={isSignedIn ? <DashBoard /> : <Login />} />
-          <Route path="/sign-up" element={isSignedIn ? <DashBoard /> : <Register />} />
-          <Route path="/about" element={!isSignedIn ? <About /> : <DashBoard />} />
-          <Route path="/quill" element={!isSignedIn ? <Landing /> : <Quill />} />
-          <Route path="/notes" element={!isSignedIn ? <Landing /> : <NotesList />} />
-          <Route path="/notes/add" element={!isSignedIn ? <Landing /> : <AddEditNote />} />
-          <Route path="/notes/:id" element={!isSignedIn ? <Landing /> : <AddEditNote />} />
+          <Route path="/" element={isLoggedIn ? <DashBoard /> : <Landing />} />
+          <Route path="/sign-in" element={isLoggedIn ? <DashBoard /> : <Login />} />
+          <Route path="/sign-up" element={isLoggedIn ? <DashBoard /> : <Register />} />
+          <Route path="/about" element={!isLoggedIn ? <About /> : <DashBoard />} />
+          <Route path="/quill" element={!isLoggedIn ? <Landing /> : <Quill />} />
+          <Route path="/notes" element={!isLoggedIn ? <Landing /> : <NotesList />} />
+          <Route path="/notes/add" element={!isLoggedIn ? <Landing /> : <AddNotes />} />
+          <Route path="/notes/:id" element={!isLoggedIn ? <Landing /> : <AddNotes />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

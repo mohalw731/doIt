@@ -1,6 +1,7 @@
 // components/Message.tsx
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import useUserDetails from '../../Functions/useUserDeatils';
 
 interface MessageProps {
   text: string;
@@ -9,6 +10,8 @@ interface MessageProps {
 }
 
 const Message = ({ text, isUser, avatarUrl }:MessageProps) => {
+  const { userDetails } = useUserDetails();
+  const bageLetter = userDetails?.name.toUpperCase().substring(0, 1);
   return (
     <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
       <div className={`flex md:flex-row flex-col gap-2 items-start ${isUser ? "md:items-start items-end flex-col-reverse" : ""}`}>
@@ -20,7 +23,7 @@ const Message = ({ text, isUser, avatarUrl }:MessageProps) => {
             >
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
             </span>
-            <img src={avatarUrl} alt="User avatar" className="size-8 rounded-full" />
+            <span className="size-8 rounded-full bg-slate-300 items-center flex justify-center">{bageLetter} </span>
           </>
         ) : (
           <>

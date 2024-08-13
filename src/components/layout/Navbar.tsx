@@ -1,12 +1,16 @@
-import { SignInButton, UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import Menu from "./Menu";
 import { useState } from "react";
+import useUserDetails from "../../Functions/useUserDeatils";
+import useLogout from "../../Functions/useLogout";
 
 export default function Navbar() {
-  const { isSignedIn } = useUser();
+  const { isLoggedIn, userDetails } = useUserDetails();
+
+  const { handleSignOut } = useLogout();
 
   const [isOpen, setIsOpen] = useState(false);
+  const bageLetter = userDetails?.name.toUpperCase().substring(0, 1);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -16,7 +20,7 @@ export default function Navbar() {
     <div className="relative">
       <header className="flex items-center justify-between py-5 z-50">
         <div className="blue-shadow max-w-7xl mx-auto" />
-        {!isSignedIn ? (
+        {!isLoggedIn ? (
           <Link to="/about" className="text-slate-600">
             <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
               About
@@ -59,7 +63,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {isSignedIn && (
+        {isLoggedIn && (
           <nav className=" gap-5 hidden md:flex">
             <Link to="/" className="text-slate-600">
               <button className="btn btn-ghost rounded-full font-normal text-base text-slate-600">
@@ -81,12 +85,20 @@ export default function Navbar() {
           </nav>
         )}
 
-        {isSignedIn ? (
-          <UserButton />
-        ) : (
-          <button className="bg-slate-200 py-2 px-6 rounded-full  font-normal hover:shadow-sm  border-none text-slate-600 ">
-            <SignInButton />
+        {isLoggedIn ? (
+          <button
+            className="btn-circle size-8 bg-slate-300 rounded-full font-normal text-base text-slate-600"
+            onClick={handleSignOut}
+          >
+            <span>{bageLetter}</span>
           </button>
+        ) : (
+          <Link
+            to="/sign-in"
+            className="bg-slate-200 py-2 px-6 rounded-full  font-normal hover:shadow-sm  border-none text-slate-600 "
+          >
+            Sign in
+          </Link>
         )}
       </header>
 

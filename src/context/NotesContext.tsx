@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { collection, getDocs, query, where, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../configs/Firebase';
-import { useAuth } from '@clerk/clerk-react';
+import useUserDetails from '../Functions/useUserDeatils';
 
 interface Note {
   id: string;
@@ -29,7 +29,8 @@ export const useNotes = () => {
 };
 
 export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
-  const { userId } = useAuth();
+  const { userDetails } = useUserDetails();
+  const userId = userDetails?.uid;
   const [notes, setNotes] = useState<Note[]>([]);
 
   const getNotes = async () => {

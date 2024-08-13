@@ -1,5 +1,4 @@
 // components/brainstorm/BrainstormLayout.tsx
-import { useUser } from "@clerk/clerk-react";
 import lol from "../../assets/doitai.png";
 import Welcome from "../layout/Welcome";
 import { useChat } from "../../context/ChatContext";
@@ -9,6 +8,7 @@ import useAdjustHeight from "../../Hooks/useAdjustHeight";
 import DropdownSelector from "./DropdownSelector";
 import MessageList from "./MessageList";
 import InputForm from "./InputForm";
+import useUserDetails from "../../Functions/useUserDeatils";
 
 type AIType =
   | "default"
@@ -18,11 +18,14 @@ type AIType =
   | "seo-specialist";
 
 const QuillLayout = () => {
-  const { user } = useUser();
   const { messages, clearMessages } = useChat();
   const { input, setInput, loading, run, error, setContext, autoMessage } =
     useGeminiAi();
   const { textareaRef, adjustTextareaHeight } = useAdjustHeight();
+
+  const { userDetails } = useUserDetails();
+  const bageLetter = userDetails?.name.toUpperCase().substring(0, 1);
+
 
   useEffect(() => {
     adjustTextareaHeight();
@@ -68,7 +71,7 @@ const QuillLayout = () => {
           )}
           <MessageList
             messages={messages}
-            userAvatarUrl={user?.imageUrl || ""}
+            userAvatarUrl={bageLetter || ""}
             aiAvatarUrl={lol}
           />
           {loading && (

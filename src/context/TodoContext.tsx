@@ -2,10 +2,10 @@ import React, { createContext, useContext, useEffect, useState, useMemo } from "
 import { Todo } from "../types/todo";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { useAuth } from "@clerk/clerk-react";
 import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { db } from "../configs/Firebase";
 import { useCategory } from "./CategoryContext";
+import useUserDetails from "../Functions/useUserDeatils";
 
 interface TodoContextType {
   todos: Todo[];
@@ -32,18 +32,18 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const [todoText, setTodoText] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const { selectedCategoryEmoji, categories } = useCategory();
-  const { userId } = useAuth();
+  const { userDetails } = useUserDetails();
+  const userId = userDetails?.uid;
 
-  // Set up a real-time listener for todos when userId changes
   useEffect(() => {
     if (!userId) return;
-  
+    setLoading(true); // Ensure loading state is set to true before fetching starts.
     const todosQuery = query(
       collection(db, "todos"),
       where("userId", "==", userId),
-      orderBy("createdAt", "desc") // Sort by creation date in descending order
+      orderBy("createdAt", "desc")
     );
-    
+  
     const unsubscribe = onSnapshot(todosQuery, (snapshot) => {
       const fetchedTodos: Todo[] = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -52,7 +52,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
         userId: doc.data().userId,
         categoryId: doc.data().categoryId,
         emoji: doc.data().emoji,
-        createdAt: doc.data().createdAt.toDate(), // Ensure this line matches your Firestore document structure
+        createdAt: doc.data().createdAt.toDate(),
       }));
       setTodos(fetchedTodos);
       setLoading(false);
@@ -60,9 +60,9 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Error fetching todos: ", error);
     });
     
-    // Clean up the listener on unmount
     return () => unsubscribe();
   }, [userId]);
+  
   
 
   const addTodo = async (categoryId: string) => {

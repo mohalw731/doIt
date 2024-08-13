@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, where, writeBatch } from 'firebase/firestore';
-import { useAuth } from '@clerk/clerk-react';
 import { toast } from 'react-toastify';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from '../configs/Firebase';
+import useUserDetails from '../Functions/useUserDeatils';
 
 interface Category {
   name: string;
@@ -41,7 +41,8 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     message: "",
     error: false,
   });
-  const { userId } = useAuth();
+  const { userDetails } = useUserDetails();
+  const userId = userDetails?.uid;
 
   const formValidation = () => {
     if (!category) {
