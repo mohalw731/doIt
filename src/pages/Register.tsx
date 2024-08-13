@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Register() {
   return (
-    <main className="md:py-44 py-28">
+    <main className="md:py-44 py-24">
       <span className="blue-shadow" />
 
       <div className="flex justify-center pb-5">
@@ -14,7 +14,7 @@ export default function Register() {
       </div>
       <form
         action=""
-        className="z-[9999] flex flex-col max-w-[400px] mx-auto rounded-2xl bg-white p-10 shadow-md"
+        className="z-[100] flex flex-col max-w-[400px] mx-auto rounded-2xl bg-white py-10 px-6 shadow-md"
       >
         <h1 className="text-3xl text-slate-800 mb-3">Sign up</h1>
         <p className="text-slate-600 ">

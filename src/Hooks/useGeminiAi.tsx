@@ -29,7 +29,7 @@ export default function useGeminiAi() {
         .join("\n");
       const fullInput = `${context}\n${messageHistory}\nUser: ${input}`;
 
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
       const result = await model.generateContent(fullInput);
       const text = await result.response.text();
       const aiMessage = { text, isUser: false };
