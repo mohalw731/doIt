@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 import { useState } from "react";
 import useUserDetails from "../../Functions/useUserDeatils";
@@ -10,7 +10,9 @@ export default function Navbar() {
   const { handleSignOut } = useLogout();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const bageLetter = userDetails?.name.toUpperCase().substring(0, 1);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -88,7 +90,7 @@ export default function Navbar() {
         {isLoggedIn ? (
           <button
             className="btn-circle size-8 bg-slate-300 rounded-full font-normal text-base text-slate-600"
-            onClick={handleSignOut}
+            onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
           >
             <span>{bageLetter}</span>
           </button>
@@ -103,6 +105,13 @@ export default function Navbar() {
       </header>
 
       {isOpen && <Menu />}
+      {isProfileMenuOpen && (
+        <ul className="absolute bg-slate-200 border shadow-xl  max-w-[12rem] flex flex-col gap-2 border-slate-200 rounded-box   w-[100%] right-0 top-16  p-2 z-[999]">
+          <li className="text-slate-800 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("/profile")}>Profile</li>
+          <li className="text-red-500 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer" onClick={handleSignOut}>Signout</li>
+        </ul>
+      )
+      }
     </div>
   );
 }

@@ -7,6 +7,7 @@ interface UserDetails {
     email: string;
     name: string;
     uid: string;
+    password: string;
 }
 
 export default function useUserDetails() {

@@ -59,6 +59,7 @@ export default function useRegister() {
         email: user.email,
         name: state.name,
         uid: user.uid,
+        password: state.password,
       });
 
       navigate("/");

@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AddNotes from "./pages/AddNotes";
 import useUserDetails from "./Functions/useUserDeatils";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/about" element={!isLoggedIn ? <About /> : <DashBoard />} />
           <Route path="/quill" element={!isLoggedIn ? <Landing /> : <Quill />} />
           <Route path="/notes" element={!isLoggedIn ? <Landing /> : <NotesList />} />
+          <Route path="/profile" element={!isLoggedIn ? <Landing /> : <Profile />} />
           <Route path="/notes/add" element={!isLoggedIn ? <Landing /> : <AddNotes />} />
           <Route path="/notes/:id" element={!isLoggedIn ? <Landing /> : <AddNotes />} />
           <Route path="*" element={<NotFoundPage />} />
