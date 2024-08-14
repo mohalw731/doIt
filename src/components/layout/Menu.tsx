@@ -8,9 +8,9 @@ export default function Menu() {
         <li onClick={() => navigate("/")}>
           <a className="text-xl text-slate-800">Home</a>
         </li>
-        <li onClick={() => navigate("/quill")}>
+        {/* <li onClick={() => navigate("/quill")}>
           <a className="text-xl text-slate-800">Quill AI</a>
-        </li>
+        </li> */}
         <li onClick={() => navigate("/notes")}>
           <a className="text-xl text-slate-800">Notes</a>
         </li>

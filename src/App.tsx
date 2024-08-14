@@ -3,7 +3,7 @@ import Landing from "./pages/Landing";
 import DashBoard from "./pages/DashBoard";
 import About from "./pages/About";
 import { ToastContainer } from "react-toastify";
-import Quill from "./pages/Quill";
+// import Quill from "./pages/Quill";
 // import { AddEditNote } from "./pages/AddNotes";
 import { NotesList } from "./components/notes/NotesList";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -33,10 +33,10 @@ function App() {
             path="/about"
             element={!isLoggedIn ? <About /> : <DashBoard />}
           />
-          <Route
+          {/* <Route
             path="/quill"
             element={!isLoggedIn ? <Landing /> : <Quill />}
-          />
+          /> */}
           <Route
             path="/notes"
             element={!isLoggedIn ? <Landing /> : <NotesList />}
@@ -51,7 +51,7 @@ function App() {
           />
           <Route
             path="/notes/:id"
-            element={!isLoggedIn ? <Landing /> : <AddNotes />}
+            element={ <AddNotes />}
           />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
