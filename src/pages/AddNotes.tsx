@@ -4,9 +4,15 @@ import axios from "axios";
 import "react-quill/dist/quill.snow.css";
 import Navbar from "../components/layout/Navbar";
 import { useParams } from "react-router-dom";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "../configs/Firebase";
-import { MagicWandIcon } from "@radix-ui/react-icons";
+import { MagicWandIcon, TimerIcon } from "@radix-ui/react-icons";
 import useUserDetails from "../auth-functions/useUserDeatils";
 import _ from "lodash";
 
@@ -21,21 +27,24 @@ export default function AddEditNote() {
   const uid = userDetails?.uid;
 
   useEffect(() => {
-    const fetchNote = async () => {
-      if (id) {
-        const noteRef = doc(db, "notes", id);
-        const noteSnap = await getDoc(noteRef);
-        if (noteSnap.exists()) {
-          const noteData = noteSnap.data();
+    if (id) {
+      const noteRef = doc(db, "notes", id);
+
+      // Set up a real-time listener for the note document
+      const unsubscribe = onSnapshot(noteRef, (doc) => {
+        if (doc.exists()) {
+          const noteData = doc.data();
           setTitle(noteData.title);
           setValue(noteData.body);
         } else {
           setError("Note not found");
           setTimeout(() => setError(""), 3000);
         }
-      }
-    };
-    fetchNote();
+      });
+
+      // Clean up the listener when the component unmounts
+      return () => unsubscribe();
+    }
   }, [id]);
 
   useEffect(() => {
@@ -66,7 +75,7 @@ export default function AddEditNote() {
           {
             model: "gpt-3.5-turbo",
             messages: [{ role: "user", content: highlightedText }],
-            max_tokens: 10,
+            max_tokens: 100,
           },
           {
             headers: {
@@ -115,7 +124,7 @@ export default function AddEditNote() {
         setError("Error saving note: " + error);
         setTimeout(() => setError(""), 3000);
       }
-    }, 1000), // 1-second debounce
+    }, 1000),
     [id, uid]
   );
 
@@ -133,18 +142,18 @@ export default function AddEditNote() {
   return (
     <>
       <Navbar />
-      <main className="max-w-[1200px] mx-auto md:p-5 flex flex-col">
-        <div className="pb-6 flex items-center justify-between">
+      <main className="max-w-[1200px] mx-auto  flex flex-col">
+        <div className="pb-6 flex  justify-between items-center">
           <input
             type="text"
-            className="font-bold bg-transparent md:text-3xl text-sm outline-none"
+            className="font-bold bg-transparent md:text-3xl text-base outline-none"
             placeholder="Untitled Document"
             value={title}
             onChange={handleTitleChange}
           />
-          <div className="flex items-center gap-4">
+          <div className="flex  items-center gap-2">
             <button
-              className="btn btn-circle btn-ghost"
+              className="btn btn-circle btn-ghost text-slate-600"
               onClick={loading ? () => {} : handleAigen}
             >
               {loading ? (
@@ -153,7 +162,17 @@ export default function AddEditNote() {
                 <MagicWandIcon className="size-6" />
               )}
             </button>
-            <button className="hover:bg-slate-200 px-3 py-1 rounded" onClick={() => saveNote(value, title)}>Save</button>
+
+            <button className="btn btn-circle btn-ghost hover:bg-slate-200">
+              <TimerIcon className="size-6 text-slate-600" />
+            </button>
+
+            <button
+              className="hover:bg-slate-200 px-3 py-1 rounded"
+              onClick={() => saveNote(value, title)}
+            >
+              Save
+            </button>
           </div>
         </div>
         {error && <p className="text-red-500 text-center mb-5">{error}</p>}
@@ -161,7 +180,7 @@ export default function AddEditNote() {
           theme="snow"
           value={value}
           onChange={handleContentChange}
-          className="flex-1 h-screen custom-quill rounded-xl mb-10"
+          className="flex-1  custom-quill rounded-xl mb-10"
         />
       </main>
     </>
