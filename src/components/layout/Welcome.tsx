@@ -1,4 +1,4 @@
-import useUserDetails from "../../Functions/useUserDeatils";
+import useUserDetails from "../../auth-functions/useUserDeatils";
 import useGetGreeting from "../../Hooks/useGetGreeting"; // Ensure this path is correct
 
 export default function Welcome() {

@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "./Menu";
 import { useState } from "react";
-import useUserDetails from "../../Functions/useUserDeatils";
-import useLogout from "../../Functions/useLogout";
+import useUserDetails from "../../auth-functions/useUserDeatils";
+import useLogout from "../../auth-functions/useLogout";
 
 export default function Navbar() {
   const { isLoggedIn, userDetails } = useUserDetails();
@@ -107,11 +107,20 @@ export default function Navbar() {
       {isOpen && <Menu />}
       {isProfileMenuOpen && (
         <ul className="absolute bg-slate-200 border shadow-xl  max-w-[12rem] flex flex-col gap-2 border-slate-200 rounded-box   w-[100%] right-0 top-16  p-2 z-[999]">
-          <li className="text-slate-800 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer" onClick={() => navigate("/profile")}>Profile</li>
-          <li className="text-red-500 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer" onClick={handleSignOut}>Signout</li>
+          <li
+            className="text-slate-800 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer"
+            onClick={() => navigate("/profile")}
+          >
+            Profile
+          </li>
+          <li
+            className="text-red-500 py-2 px-4 rounded-xl bg-slate-100 hover:bg-slate-300 cursor-pointer"
+            onClick={handleSignOut}
+          >
+            Signout
+          </li>
         </ul>
-      )
-      }
+      )}
     </div>
   );
 }

@@ -1,7 +1,16 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { collection, getDocs, query, where, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
-import { db } from '../configs/Firebase';
-import useUserDetails from '../Functions/useUserDeatils';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { db } from "../configs/Firebase";
+import useUserDetails from "../auth-functions/useUserDeatils";
 
 interface Note {
   id: string;
@@ -23,7 +32,7 @@ const NotesContext = createContext<NotesContextType | undefined>(undefined);
 export const useNotes = () => {
   const context = useContext(NotesContext);
   if (!context) {
-    throw new Error('useNotes must be used within a NotesProvider');
+    throw new Error("useNotes must be used within a NotesProvider");
   }
   return context;
 };
@@ -35,7 +44,10 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getNotes = async () => {
     if (!userId) return;
-    const notesQuery = query(collection(db, 'notes'), where('userId', '==', userId));
+    const notesQuery = query(
+      collection(db, "notes"),
+      where("userId", "==", userId)
+    );
     const querySnapshot = await getDocs(notesQuery);
     const notesData: Note[] = [];
     querySnapshot.forEach((doc) => {
@@ -47,17 +59,17 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const addNote = async (note: Note) => {
-    await addDoc(collection(db, 'notes'), note);
+    await addDoc(collection(db, "notes"), note);
     getNotes();
   };
 
   const updateNote = async (id: string, updatedNote: Partial<Note>) => {
-    await updateDoc(doc(db, 'notes', id), updatedNote);
+    await updateDoc(doc(db, "notes", id), updatedNote);
     getNotes();
   };
 
   const deleteNote = async (id: string) => {
-    await deleteDoc(doc(db, 'notes', id));
+    await deleteDoc(doc(db, "notes", id));
     getNotes();
   };
 
@@ -66,7 +78,9 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   }, [userId]);
 
   return (
-    <NotesContext.Provider value={{ notes, getNotes, addNote, updateNote, deleteNote }}>
+    <NotesContext.Provider
+      value={{ notes, getNotes, addNote, updateNote, deleteNote }}
+    >
       {children}
     </NotesContext.Provider>
   );

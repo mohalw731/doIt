@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useLogin from "../Functions/useLogin";
+import useLogin from "../auth-functions/useLogin";
 
 export default function Login() {
   const { state, handleInputChange, handleLogin } = useLogin();
@@ -15,15 +15,19 @@ export default function Login() {
           </span>
         </Link>
       </div>
-      
+
       <form
         onSubmit={handleLogin}
         className="z-[100] flex flex-col max-w-[400px] mx-auto rounded-2xl bg-white py-10 px-6 shadow-md"
       >
         <h1 className="text-3xl text-slate-800 mb-3">Sign In</h1>
-        <p className="text-slate-600 mb-6">Sign in if you already have an account.</p>
+        <p className="text-slate-600 mb-6">
+          Sign in if you already have an account.
+        </p>
 
-        <label htmlFor="email" className="sr-only">Email</label>
+        <label htmlFor="email" className="sr-only">
+          Email
+        </label>
         <input
           id="email"
           name="email"
@@ -35,7 +39,9 @@ export default function Login() {
           required
         />
 
-        <label htmlFor="password" className="sr-only">Password</label>
+        <label htmlFor="password" className="sr-only">
+          Password
+        </label>
         <input
           id="password"
           name="password"
@@ -47,7 +53,9 @@ export default function Login() {
           required
         />
 
-        {state.error && <p className="text-red-500 text-sm mt-2">{state.error}</p>}
+        {state.error && (
+          <p className="text-red-500 text-sm mt-2">{state.error}</p>
+        )}
 
         <button
           type="submit"
@@ -59,7 +67,10 @@ export default function Login() {
         <div className="text-slate-600 mt-10 flex flex-col gap-1">
           <p className="text-blue-700">Forgot your password?</p>
           <p>
-            Don't have an account? <Link to="/sign-up" className="text-blue-700">Sign Up</Link>
+            Don't have an account?{" "}
+            <Link to="/sign-up" className="text-blue-700">
+              Sign Up
+            </Link>
           </p>
         </div>
       </form>

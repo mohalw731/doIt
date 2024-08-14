@@ -1,9 +1,19 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, query, where, writeBatch } from 'firebase/firestore';
-import { toast } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
-import { db } from '../configs/Firebase';
-import useUserDetails from '../Functions/useUserDeatils';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+  writeBatch,
+} from "firebase/firestore";
+import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+import { db } from "../configs/Firebase";
+import useUserDetails from "../auth-functions/useUserDeatils";
 
 interface Category {
   name: string;
@@ -29,14 +39,19 @@ interface CategoryContextType {
   hanldeSelectedCategoryEmoji: (category: string) => void;
 }
 
-const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
+const CategoryContext = createContext<CategoryContextType | undefined>(
+  undefined
+);
 
-export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [category, setCategory] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [emoji, setEmoji] = useState<string>("🔥");
-  const [selectedCategoryEmoji, setSelectedCategoryEmoji] = useState<string>("");
+  const [selectedCategoryEmoji, setSelectedCategoryEmoji] =
+    useState<string>("");
   const [error, setError] = useState<{ message: string; error: boolean }>({
     message: "",
     error: false,
@@ -101,7 +116,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         userId: userId || "",
         id: uuidv4(),
         createdAt: new Date(),
-        emoji: emoji
+        emoji: emoji,
       };
 
       await addDoc(collection(db, "categories"), newCategory);
@@ -116,7 +131,10 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const handleGetCategories = () => {
     if (!userId) return;
 
-    const categoriesQuery = query(collection(db, "categories"), where("userId", "==", userId));
+    const categoriesQuery = query(
+      collection(db, "categories"),
+      where("userId", "==", userId)
+    );
 
     const unsubscribe = onSnapshot(categoriesQuery, (querySnapshot) => {
       const categoriesData: Category[] = [];
@@ -128,7 +146,6 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       });
 
       setCategories(categoriesData);
-
     });
 
     // Return the unsubscribe function to stop listening when the component unmounts
@@ -138,7 +155,10 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const handleDeleteCategory = async (id: string) => {
     try {
       // Delete all tasks associated with this category
-      const todosQuery = query(collection(db, "todos"), where("categoryId", "==", id));
+      const todosQuery = query(
+        collection(db, "todos"),
+        where("categoryId", "==", id)
+      );
       const querySnapshot = await getDocs(todosQuery);
 
       const batch = writeBatch(db);
@@ -153,7 +173,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const categoryRef = doc(db, "categories", id);
       await deleteDoc(categoryRef);
 
-      setCategories(categories.filter(cat => cat.id !== id));
+      setCategories(categories.filter((cat) => cat.id !== id));
     } catch (error: any) {
       toast.error("Failed to delete category and associated tasks");
     }
@@ -165,7 +185,21 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   return (
     <CategoryContext.Provider
-      value={{ categories, category, setCategory, error, handleAddCategory, handleDeleteCategory, setIsOpen, isOpen, setEmoji, emoji, selectedCategoryEmoji, setSelectedCategoryEmoji, hanldeSelectedCategoryEmoji,  }}
+      value={{
+        categories,
+        category,
+        setCategory,
+        error,
+        handleAddCategory,
+        handleDeleteCategory,
+        setIsOpen,
+        isOpen,
+        setEmoji,
+        emoji,
+        selectedCategoryEmoji,
+        setSelectedCategoryEmoji,
+        hanldeSelectedCategoryEmoji,
+      }}
     >
       {children}
     </CategoryContext.Provider>
@@ -175,7 +209,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 export const useCategory = () => {
   const context = useContext(CategoryContext);
   if (context === undefined) {
-    throw new Error('useCategory must be used within a CategoryProvider');
+    throw new Error("useCategory must be used within a CategoryProvider");
   }
   return context;
 };

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useNotes } from "../../context/NotesContext";
 import { NoteCard } from "./NoteCard";
-import useUserDetails from "../../Functions/useUserDeatils";
+import useUserDetails from "../../auth-functions/useUserDeatils";
 
 export const NotesList: React.FC = () => {
   const { userDetails } = useUserDetails();

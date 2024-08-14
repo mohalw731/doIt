@@ -1,11 +1,28 @@
-import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useMemo,
+} from "react";
 import { Todo } from "../types/todo";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../configs/Firebase";
 import { useCategory } from "./CategoryContext";
-import useUserDetails from "../Functions/useUserDeatils";
+import useUserDetails from "../auth-functions/useUserDeatils";
 
 interface TodoContextType {
   todos: Todo[];
@@ -43,27 +60,29 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       where("userId", "==", userId),
       orderBy("createdAt", "desc")
     );
-  
-    const unsubscribe = onSnapshot(todosQuery, (snapshot) => {
-      const fetchedTodos: Todo[] = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        text: doc.data().text,
-        completed: doc.data().completed,
-        userId: doc.data().userId,
-        categoryId: doc.data().categoryId,
-        emoji: doc.data().emoji,
-        createdAt: doc.data().createdAt.toDate(),
-      }));
-      setTodos(fetchedTodos);
-      setLoading(false);
-    }, (error) => {
-      console.error("Error fetching todos: ", error);
-    });
-    
+
+    const unsubscribe = onSnapshot(
+      todosQuery,
+      (snapshot) => {
+        const fetchedTodos: Todo[] = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          text: doc.data().text,
+          completed: doc.data().completed,
+          userId: doc.data().userId,
+          categoryId: doc.data().categoryId,
+          emoji: doc.data().emoji,
+          createdAt: doc.data().createdAt.toDate(),
+        }));
+        setTodos(fetchedTodos);
+        setLoading(false);
+      },
+      (error) => {
+        console.error("Error fetching todos: ", error);
+      }
+    );
+
     return () => unsubscribe();
   }, [userId]);
-  
-  
 
   const addTodo = async (categoryId: string) => {
     if (!todoText) {
@@ -73,7 +92,9 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const category = categories.find((cat) => cat.id === categoryId);
-      const categoryEmoji = category ? category.emoji : selectedCategoryEmoji || "🔥";
+      const categoryEmoji = category
+        ? category.emoji
+        : selectedCategoryEmoji || "🔥";
 
       const newTodo = {
         text: todoText,
@@ -82,7 +103,6 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
         categoryId: categoryId || "",
         emoji: categoryEmoji, // Use the category emoji
         createdAt: new Date(), // Add a creation timestamp
-
       };
 
       await addDoc(collection(db, "todos"), newTodo);
@@ -95,7 +115,10 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
   const toggleCompleted = async (id: string) => {
     const todoRef = doc(db, "todos", id);
     const todoDoc = await getDoc(todoRef);
-    const updatedTodo = { ...todoDoc.data(), completed: !todoDoc?.data()?.completed };
+    const updatedTodo = {
+      ...todoDoc.data(),
+      completed: !todoDoc?.data()?.completed,
+    };
 
     try {
       await updateDoc(todoRef, updatedTodo);
@@ -108,26 +131,24 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await deleteDoc(doc(db, "todos", id));
       // Update local state after deletion
-      setTodos(todos.filter(todo => todo.id !== id));
+      setTodos(todos.filter((todo) => todo.id !== id));
     } catch (error: any) {
       toast.error(error.message);
     }
   };
-  
 
-  const value = useMemo(() => ({
-    todos,
-    addTodo,
-    setTodoText,
-    todoText,
-    toggleCompleted,
-    handleDeleteTodos,
-    loading,
-  }), [todos, todoText, loading]);
-
-  return (
-    <TodoContext.Provider value={value}>
-      {children}
-    </TodoContext.Provider>
+  const value = useMemo(
+    () => ({
+      todos,
+      addTodo,
+      setTodoText,
+      todoText,
+      toggleCompleted,
+      handleDeleteTodos,
+      loading,
+    }),
+    [todos, todoText, loading]
   );
+
+  return <TodoContext.Provider value={value}>{children}</TodoContext.Provider>;
 };

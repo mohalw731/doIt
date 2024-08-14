@@ -13,10 +13,12 @@ interface UserDetails {
 export default function useUserDetails() {
   const [userDetails, setUserDetails] = useState <UserDetails | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const auth = getAuth(app);
   const noUserData = userDetails == null;
 
   const getUserDetails = async (uid: string) => {
+    setLoading(true);
     try {
       const docRef = doc(db, 'User', uid);
       const docSnap = await getDoc(docRef);
@@ -24,6 +26,8 @@ export default function useUserDetails() {
       if (docSnap.exists()) {
         setUserDetails(docSnap.data() as any);
       }
+
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching user details:", error);
     }
@@ -43,5 +47,5 @@ export default function useUserDetails() {
     return () => unsubscribe();
   }, [auth]);
 
-  return { userDetails, isLoggedIn, noUserData };
+  return { userDetails, isLoggedIn, noUserData, loading };
 }

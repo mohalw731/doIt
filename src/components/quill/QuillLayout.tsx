@@ -8,7 +8,7 @@ import useAdjustHeight from "../../Hooks/useAdjustHeight";
 import DropdownSelector from "./DropdownSelector";
 import MessageList from "./MessageList";
 import InputForm from "./InputForm";
-import useUserDetails from "../../Functions/useUserDeatils";
+import useUserDetails from "../../auth-functions/useUserDeatils";
 
 type AIType =
   | "default"
@@ -25,7 +25,6 @@ const QuillLayout = () => {
 
   const { userDetails } = useUserDetails();
   const bageLetter = userDetails?.name.toUpperCase().substring(0, 1);
-
 
   useEffect(() => {
     adjustTextareaHeight();
