@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/layout/Navbar";
-
 import { useNavigate } from "react-router-dom";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { useNotes } from "../../context/NotesContext";
@@ -8,11 +7,15 @@ import { NoteCard } from "./NoteCard";
 import useUserDetails from "../../auth-functions/useUserDeatils";
 
 export const NotesList: React.FC = () => {
+  const { notes, getNotes } = useNotes(); // Destructure getNotes
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
-  const { notes } = useNotes();
   const name = userDetails?.name.split(" ");
   const firstName = name ? name[0] : "";
+
+  useEffect(() => {
+    getNotes();
+  }, [getNotes]);
 
   return (
     <main className="z-50 bg-slate-100">
