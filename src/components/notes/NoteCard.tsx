@@ -38,7 +38,7 @@ export const NoteCard = ({ note }: NoteCardProps) => {
         {note.body
           .replace(/<[^>]+>/g, "")
           .split(" ")
-          .slice(0, 30)
+          .slice(0, 15)
           .join(" ")}
         ...
       </p>

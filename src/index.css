@@ -159,5 +159,5 @@ html {
 
 .custom-quill .ql-editor {
   padding: 1rem;
-  height: calc(100vh - 17rem);
+  height: calc(100dvh - 14rem);
 }

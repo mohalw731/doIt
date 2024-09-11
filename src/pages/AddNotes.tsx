@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../configs/Firebase";
-import { MagicWandIcon, TimerIcon } from "@radix-ui/react-icons";
+import { MagicWandIcon, StopwatchIcon } from "@radix-ui/react-icons";
 import useUserDetails from "../auth-functions/useUserDeatils";
 import _ from "lodash";
 
@@ -25,6 +25,10 @@ export default function AddEditNote() {
   const { userDetails } = useUserDetails();
   const { id } = useParams<{ id: string }>();
   const uid = userDetails?.uid;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [count, setCount] = useState(0);
+
 
   useEffect(() => {
     if (id) {
@@ -42,7 +46,6 @@ export default function AddEditNote() {
         }
       });
 
-      // Clean up the listener when the component unmounts
       return () => unsubscribe();
     }
   }, [id]);
@@ -75,11 +78,11 @@ export default function AddEditNote() {
           {
             model: "gpt-3.5-turbo",
             messages: [{ role: "user", content: highlightedText }],
-            max_tokens: 100,
+            max_tokens: 150,
           },
           {
             headers: {
-              Authorization: `Bearer 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`,
+              Authorization: `Bearer ${import.meta.env.VITE_OPENAI_KEY}`,
               "Content-Type": "application/json",
             },
           }
@@ -120,6 +123,7 @@ export default function AddEditNote() {
           };
           await addDoc(collection(db, "notes"), newNote);
         }
+
       } catch (error) {
         setError("Error saving note: " + error);
         setTimeout(() => setError(""), 3000);
@@ -139,11 +143,37 @@ export default function AddEditNote() {
     saveNote(value, newTitle);
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCount((prevCount) => prevCount + 1);
+    }, 1000);
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
+
+  const formatTime = (timeInSeconds: number) => {
+    const hours = Math.floor(timeInSeconds / 3600);
+    const minutes = Math.floor((timeInSeconds % 3600) / 60);
+    const seconds = timeInSeconds % 60;
+
+    const pad = (num: number) => String(num).padStart(2, "0");
+
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  };
+
+  
+ const handleTimer = () => {
+    setIsOpen(!isOpen);
+  };
+
+  
+
   return (
     <>
       <Navbar />
       <main className="max-w-[1200px] mx-auto  flex flex-col">
-        <div className="pb-6 flex  justify-between items-center">
+        <div className="pb-2 flex  justify-between items-center">
           <input
             type="text"
             className="font-bold bg-transparent md:text-3xl text-base outline-none"
@@ -163,23 +193,27 @@ export default function AddEditNote() {
               )}
             </button>
 
-            <button className="btn btn-circle btn-ghost hover:bg-slate-200">
-              <TimerIcon className="size-6 text-slate-600" />
+            <button className="btn btn-circle btn-ghost hover:bg-slate-200" onClick={handleTimer}>
+             <StopwatchIcon className="size-6 text-slate-600" />
             </button>
 
-            <button
-              className="hover:bg-slate-200 px-3 py-1 rounded"
+            {/* <button
+              className="hover:bg-slate-200 px-3 py-1 rounded border"
               onClick={() => saveNote(value, title)}
             >
               Save
-            </button>
+            </button> */}
           </div>
         </div>
+
+        {isOpen && <div className="text-slate-400 md:text-2xl pb-2 text-end">{formatTime(count)}</div>}
+
         {error && <p className="text-red-500 text-center mb-5">{error}</p>}
         <ReactQuill
           theme="snow"
           value={value}
           onChange={handleContentChange}
+          placeholder="Start typing here..."
           className="flex-1  custom-quill rounded-xl mb-10"
         />
       </main>
