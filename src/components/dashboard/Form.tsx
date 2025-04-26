@@ -1,7 +1,6 @@
 import TodoList from "./TodoList";
 import Welcome from "../layout/Welcome";
 import { useTodoContext } from "../../context/TodoContext";
-import Quote from "./Quote";
 import { Input } from "./Input";
 import CategoryList from "./CategoryList";
 import { useState } from "react";
@@ -11,8 +10,7 @@ function Form() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   return (
-    <main className="py-5  max-w-[700px] mx-auto z-50 pb-14">
-      <Quote />
+    <main className="md:py-14 py-10  max-w-[700px] mx-auto z-50 pb-14">
       <Welcome />
       <form
         onSubmit={(e) => {

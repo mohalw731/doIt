@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
-import useGeminiAi from "./useGeminiAi";
 
 export default function useAdjustHeight() {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const { input } = useGeminiAi();
 
 
   const adjustTextareaHeight = () => {
@@ -15,7 +13,7 @@ export default function useAdjustHeight() {
 
   useEffect(() => {
     adjustTextareaHeight();
-  }, [input]);
+  }, []);
 
   return { textareaRef, adjustTextareaHeight };
 }

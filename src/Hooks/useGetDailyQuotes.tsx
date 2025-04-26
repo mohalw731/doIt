@@ -1,58 +1,105 @@
 import { useEffect, useState } from 'react';
+import useUserDetails from '../auth-functions/useUserDeatils';
+// OR for Firestore:
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function useGetDailyQuotes() {
     const [quote, setQuote] = useState("");
-    const [isOpen, setIsOpen] = useState(() => {
-        // Initialize isOpen state from localStorage
-        const storedIsOpen = localStorage.getItem('isOpen');
-        return storedIsOpen === null ? false : storedIsOpen === 'true';
-    });
+    const { userDetails } = useUserDetails();
+    const userId = userDetails?.uid;
+    const [isOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     async function fetchQuotes() {
         const response = await fetch("https://type.fit/api/quotes");
         const quotes = await response.json();
-        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)].text;
-        setQuote(randomQuote);
+        return quotes[Math.floor(Math.random() * quotes.length)].text;
     }
 
-    function getStoredDate() {
-        return localStorage.getItem('lastQuoteDate');
+    async function getUserQuoteData() {
+        if (!userId) return null;
+        
+
+        const db = getFirestore();
+        const userQuoteRef = doc(db, 'userQuotes', userId);
+        const snapshot = await getDoc(userQuoteRef);
+        return snapshot.data();
     }
 
-    function setStoredDate(date: string) {
-        localStorage.setItem('lastQuoteDate', date);
+    async function saveUserQuoteData(data: any) {
+        if (!userId) return;
+        
+
+        const db = getFirestore();
+        await setDoc(doc(db, 'userQuotes', userId), data);
     }
 
     useEffect(() => {
         const today = new Date().toISOString().split('T')[0];
-        const storedDate = getStoredDate();
 
-        if (storedDate !== today) {
-            // If the stored date is not today, fetch a new quote and update the date
-            fetchQuotes();
-            setStoredDate(today);
-        } else {
-            // Otherwise, just fetch the quote from localStorage if necessary
-            const savedQuote = localStorage.getItem('currentQuote');
-            if (savedQuote) {
-                setQuote(savedQuote);
-            } else {
-                fetchQuotes();
+        async function initializeQuote() {
+            if (!userId) {
+                setLoading(false);
+                return;
             }
+
+            const userData = await getUserQuoteData();
+            const storedDate = userData?.lastQuoteDate;
+            const storedQuote = userData?.currentQuote;
+            const storedIsOpen = userData?.isOpen;
+
+            // Set isOpen state from DB or default to false
+            setIsOpen(storedIsOpen !== undefined ? storedIsOpen : false);
+
+            if (storedDate !== today) {
+                // If the stored date is not today, fetch a new quote
+                const newQuote = await fetchQuotes();
+                setQuote(newQuote);
+                await saveUserQuoteData({
+                    lastQuoteDate: today,
+                    currentQuote: newQuote,
+                    isOpen: isOpen // current state
+                });
+            } else if (storedQuote) {
+                // Otherwise, use the stored quote
+                setQuote(storedQuote);
+            } else {
+                // If no quote exists, fetch one
+                const newQuote = await fetchQuotes();
+                setQuote(newQuote);
+                await saveUserQuoteData({
+                    lastQuoteDate: today,
+                    currentQuote: newQuote,
+                    isOpen: isOpen // current state
+                });
+            }
+            setLoading(false);
         }
-    }, []);
+
+        initializeQuote();
+    }, [userId]);
 
     useEffect(() => {
-        if (quote) {
-            // Save the current quote in localStorage
-            localStorage.setItem('currentQuote', quote);
-        }
-    }, [quote]);
+        if (!userId || !quote) return;
+
+        // Save the current quote in DB whenever it changes
+        saveUserQuoteData({
+            currentQuote: quote,
+            isOpen: isOpen,
+            lastQuoteDate: new Date().toISOString().split('T')[0]
+        });
+    }, [quote, userId]);
 
     useEffect(() => {
-        // Save isOpen state in localStorage whenever it changes
-        localStorage.setItem('isOpen', isOpen.toString());
-    }, [isOpen]);
+        if (!userId) return;
 
-    return { quote, isOpen, setIsOpen };
+        // Save isOpen state in DB whenever it changes
+        saveUserQuoteData({
+            currentQuote: quote,
+            isOpen: isOpen,
+            lastQuoteDate: new Date().toISOString().split('T')[0]
+        });
+    }, [isOpen, userId]);
+
+    return { quote, isOpen, setIsOpen, loading };
 }
